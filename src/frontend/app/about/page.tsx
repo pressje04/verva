@@ -1,4 +1,4 @@
-import Navbar from "@/frontend/components/Navbar"
+import Navbar from "@/components/Navbar"
 
 export default function AboutPage() {
     return (

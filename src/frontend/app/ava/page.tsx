@@ -1,4 +1,4 @@
-import AdminInterviewForm from "@/frontend/components/AdminInterviewForm";
+import AdminInterviewForm from "@/components/AdminInterviewForm";
 
 export default function Admin() {
     return (

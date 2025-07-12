@@ -1,6 +1,6 @@
-import AdminInterviewForm from "@/frontend/components/AdminInterviewForm";
-import InterviewList from "@/frontend/components/InterviewList";
-import Navbar from "@/frontend/components/Navbar";
+import AdminInterviewForm from "@/components/AdminInterviewForm";
+import InterviewList from "@/components/InterviewList";
+import Navbar from "@/components/Navbar";
 
 export default function InterviewsPage() {
     return (

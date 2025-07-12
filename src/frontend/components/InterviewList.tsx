@@ -1,5 +1,5 @@
 'use client';
-import { useFetchInterviews } from "@/frontend/hooks/useFetchInterviews"
+import { useFetchInterviews } from "@/hooks/useFetchInterviews"
 import InterviewCard from "./InterviewCard";
 
 export default function InterviewList() {

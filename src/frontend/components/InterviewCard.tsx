@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchInterviewById } from "@/frontend/hooks/useFetchInterviewById";
+import { useFetchInterviewById } from "@/hooks/useFetchInterviewById";
 import { ArrowRight } from "lucide-react";
 
 export default function InterviewCard({ interview_id }: { interview_id: string }) {
