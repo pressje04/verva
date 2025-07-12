@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Interview {
+  id           String   @id @default(uuid()) //id for our db
+  title        String //What's the interview called? Company perhaps
+  role         String //What position is it for? IOS dev? SWE intern?
+  type         String //Behavioral? Technical? Maybe more specific like system design or architecture
+  difficulty   String //Easy, hard, maybe type of interview experience so your 
+  //ready for both
+  timeEstimate String //15 min, 1 hr, not strictly enforced but recommended
+  description  String
+  tags         String[] //identifiers used to filter relevant interviews
+  createdAt    DateTime @default(now())
+}
