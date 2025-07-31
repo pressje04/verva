@@ -1,22 +1,71 @@
 from model_router import get_model_response
 
-def generate_feedback(resume: str, job: str) -> str:
-    prompt = (
-    f"Here is a resume:\n{resume}\n\n"
-    f"Here is a job description:\n{job}\n\n"
-    "You are Ava AI, a brutally honest but encouraging career coach.\n"
-    "Give detailed, tailored feedback on the resume in the context of the job description above.\n"
-    "Be direct about flaws, but also highlight strengths clearly. Always be constructive.\n\n"
-
-    "Mention the job title and make the response feel personalized.\n"
-    "If possible, compare the resume to others that have successfully landed similar roles.\n"
-
-    "Structure your response in four parts:\n"
-    "1. Strengths — What stands out? What is done well?\n"
-    "2. Weaknesses — What’s missing, unclear, or poorly worded?\n"
-    "3. Advice — Specific changes to improve fit for this job. Focus especially on keywords, technical skills, and alignment with what companies typically look for in successful candidates for this role.\n"
-    "4. Score — Rate the applicant's current resume for this job from 0 to 10. Then estimate how much the score would improve if your advice was implemented.\n\n"
-
-    "Be candid but supportive. Your goal is to help this person get hired — don’t sugarcoat anything, but make them believe they can close the gap with the right changes."
+"""
+Function that generates a response using a set prompt depending on input
+"""
+def generate_response(user_text: str = "", file_text: str = "", return_prompt: bool = False) -> str:
+    if file_text and user_text:
+        prompt = (
+    f"You are Ava AI, a brutally honest but encouraging career coach.\n\n"
+    f"Here is a document the user provided:\n{file_text}\n\n"
+    f"The user asks:\n{user_text}\n\n"
+    "Generate your response using GitHub-flavored markdown.\n"
+    "Follow this **exact structure** with emoji headers and two newlines between each section:\n\n"
+    "✅ **Strengths**\n"
+    "- [Write one strength per line as a bullet]\n\n"
+    "❌ **Weaknesses**\n"
+    "- [Write one weakness per line as a bullet]\n\n"
+    "📝 **Advice**\n"
+    "- [Write one actionable tip per line. Use 'Add', 'Improve', 'Tailor', etc.]\n\n"
+    "📊 **Score**\n"
+    "**Current Fit**: X/10  \n"
+    "**With Improvements**: Y/10\n\n"
+    "Stick to this format. Do not include any additional commentary or sections."
 )
+
+
+
+    elif file_text:
+        prompt = (
+            f"You are Ava AI, a brutally honest but encouraging career coach.\n\n"
+            f"Please analyze this document:\n{file_text}\n\n"
+            "Provide detailed, constructive feedback as if reviewing a resume or job description.\n"
+            "Format your entire response using valid GitHub-flavored Markdown.\n"
+                "- Use `**bold**` for emphasis.\n"
+                "- Use `*` for bullet points (not `-`).\n"
+                "- Use proper headers like `##` or `###` for section titles.\n"
+                "- Use line breaks (`\n`) between bullets and paragraphs.\n"
+                "- Avoid raw HTML or inline styles.\n"
+        )
+
+    elif user_text:
+        prompt = (
+            f"You are Ava AI, a brutally honest but encouraging career coach.\n\n"
+            f"The user asks:\n{user_text}\n\n"
+            "Give thoughtful, specific advice — no fluff.\n"
+            "Format your entire response using valid GitHub-flavored Markdown.\n"
+                "- Use `**bold**` for emphasis.\n"
+                "- Use `*` for bullet points (not `-`).\n"
+                "- Use proper headers like `##` or `###` for section titles.\n"
+                "- Use line breaks (`\n`) between bullets and paragraphs.\n"
+                "- Avoid raw HTML or inline styles.\n"
+        )
+
+    else:
+        return "Please upload a file or enter a message."
+
+    if return_prompt:
+        return prompt
+
     return get_model_response(prompt)
+
+"""
+Function to help build out message history for the chatbot
+"""
+def build_chat_prompt(messages: list[dict]) -> str:
+    prompt = "You are Ava AI, a brutally honest but encouraging career coach.\n\n"
+    for msg in messages:
+        role = "User" if msg["role"] == "user" else "Ava"
+        prompt += f"{role}: {msg['text']}\n"
+    prompt += "Ava:"
+    return prompt

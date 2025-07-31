@@ -13,7 +13,7 @@ export function useFetchInterviews(filters={}) {
         const fetchData = async () => {
             const query = new URLSearchParams(filters).toString();
 
-            const res = await fetch(`/api/interviews/${query}`)
+            const res = await fetch(`/api/interviews/outlines/${query}`)
             const data = await res.json();
             setInterviews(data);
         };

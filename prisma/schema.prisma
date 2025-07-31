@@ -27,4 +27,82 @@ model Interview {
   createdAt DateTime @default(now())
 }
 
+// NEXT AUTH USER AUTHENTICATION MODELS   
+model User {
+  id       String  @id @default(cuid())
+  username String  @unique
+  fullName String
+  email    String  @unique
+  password String
+
+  // NextAuth
+  accounts Account[]
+  sessions Session[]
+  interviewSessions InterviewSession[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  user               User    @relation(fields: [userId], references: [id])
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  expires      DateTime
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+
+// INTERVIEW MODELS
+
+model InterviewSession {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+
+  title         String     // e.g. “Software Engineer at Netflix”
+  description   String     // Job description or custom instructions
+
+  settings      Json       // JSON blob of selected AI config (difficulty, tone, etc.)
+
+  messages      Message[]  // All Q&A exchanges
+  status        String     @default("active") // active | complete | abandoned
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Message {
+  id              String   @id @default(cuid())
+  session         InterviewSession @relation(fields: [sessionId], references: [id])
+  sessionId       String
+
+  role            String   // "user" | "ai"
+  content         String
+  timestamp       DateTime @default(now())
+}
+
 

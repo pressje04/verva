@@ -31,10 +31,10 @@ export default function AdminInterviewForm() {
             tags: form.tags.split(',').map((tag) => tag.trim())
         };
 
-        const res = await fetch("api/interviews", {
+        const res = await fetch("api/interviews/outlines", {
             method: "POST",
             headers: {
-                "Content-Type": "application.json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
         });

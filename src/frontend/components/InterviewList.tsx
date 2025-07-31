@@ -5,10 +5,11 @@ import InterviewCard from "./InterviewCard";
 export default function InterviewList() {
     const {interviews} = useFetchInterviews();
 
-    console.log(interviews);
+    console.log(interviews?.length ?? 0);
 
     return (
         <div className="flex flex-col mt-16">
+        <p className="text-black">{interviews?.length ?? 0}</p>
         {interviews.map((interview: any) => (
             <InterviewCard key={interview.id} interview_id={interview.id}/>
         ))}

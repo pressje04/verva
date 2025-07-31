@@ -16,7 +16,7 @@ export function useFetchInterviewById(id: string) {
 
     useEffect(() => {
         const fetchInterview = async () => {
-            const res = await fetch(`/api/interviews/${id}`);
+            const res = await fetch(`/api/interviews/outlines/${id}`);
             const data = await res.json();
             setInterview(data);
         }

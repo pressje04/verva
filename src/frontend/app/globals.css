@@ -35,3 +35,52 @@ body {
   @apply px-7.5 py-3 font-bold rounded-3xl transition-transform 
   duration-200 ease-in-out hover:scale-110 hover:bg-gray-900;
 }
+
+.gradient-layers {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top vibrant gradient streak */
+.gradient-layers::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -25%;
+  width: 150%;
+  height: 60%;
+  background: linear-gradient(
+    90deg,
+    rgba(131, 58, 180, 0.4) 0%,
+    rgba(253, 29, 29, 0.4) 50%,
+    rgba(252, 176, 69, 0.4) 100%
+  );
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Bottom glowing ellipse */
+.gradient-layers::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(252, 176, 69, 0.2) 0%,
+    transparent 80%
+  );
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+.navbar {
+  position: relative;
+  z-index: 20;
+}
