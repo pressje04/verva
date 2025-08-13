@@ -23,10 +23,11 @@
       "@app/*": ["app/*"],
       "@hooks/*": ["hooks/*"],
       "@utils/*": ["utils/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@prisma/client": ["src/generated/prisma"] // ✅ Tell TS to use your custom schema!
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/signup"],
   "exclude": ["node_modules"]
 }
 

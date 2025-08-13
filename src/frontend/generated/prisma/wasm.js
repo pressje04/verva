@@ -137,7 +137,8 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   fullName: 'fullName',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  resumeUrl: 'resumeUrl'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -153,6 +154,13 @@ exports.Prisma.AccountScalarFieldEnum = {
   scope: 'scope',
   id_token: 'id_token',
   session_state: 'session_state'
+};
+
+exports.Prisma.SkillScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  userId: 'userId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -171,6 +179,12 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 exports.Prisma.InterviewSessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  company: 'company',
+  jobRole: 'jobRole',
+  interviewKind: 'interviewKind',
+  difficulty: 'difficulty',
+  language: 'language',
+  interviewId: 'interviewId',
   title: 'title',
   description: 'description',
   settings: 'settings',
@@ -184,6 +198,13 @@ exports.Prisma.MessageScalarFieldEnum = {
   sessionId: 'sessionId',
   role: 'role',
   content: 'content',
+  topic: 'topic',
+  question: 'question',
+  briefFeedback: 'briefFeedback',
+  turn: 'turn',
+  type: 'type',
+  mediaUrl: 'mediaUrl',
+  transcript: 'transcript',
   timestamp: 'timestamp'
 };
 
@@ -211,12 +232,23 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.InterviewKind = exports.$Enums.InterviewKind = {
+  behavioral: 'behavioral',
+  technical: 'technical',
+  leadership: 'leadership'
+};
 
+exports.Difficulty = exports.$Enums.Difficulty = {
+  easy: 'easy',
+  medium: 'medium',
+  hard: 'hard'
+};
 
 exports.Prisma.ModelName = {
   Interview: 'Interview',
   User: 'User',
   Account: 'Account',
+  Skill: 'Skill',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   InterviewSession: 'InterviewSession',

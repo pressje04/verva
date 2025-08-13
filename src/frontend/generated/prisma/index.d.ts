@@ -29,6 +29,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
 /**
+ * Model Skill
+ * 
+ */
+export type Skill = $Result.DefaultSelection<Prisma.$SkillPayload>
+/**
  * Model Session
  * 
  */
@@ -48,6 +53,49 @@ export type InterviewSession = $Result.DefaultSelection<Prisma.$InterviewSession
  * 
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const MsgRole: {
+  user: 'user',
+  ai: 'ai'
+};
+
+export type MsgRole = (typeof MsgRole)[keyof typeof MsgRole]
+
+
+export const InterviewKind: {
+  behavioral: 'behavioral',
+  technical: 'technical',
+  leadership: 'leadership'
+};
+
+export type InterviewKind = (typeof InterviewKind)[keyof typeof InterviewKind]
+
+
+export const Difficulty: {
+  easy: 'easy',
+  medium: 'medium',
+  hard: 'hard'
+};
+
+export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]
+
+}
+
+export type MsgRole = $Enums.MsgRole
+
+export const MsgRole: typeof $Enums.MsgRole
+
+export type InterviewKind = $Enums.InterviewKind
+
+export const InterviewKind: typeof $Enums.InterviewKind
+
+export type Difficulty = $Enums.Difficulty
+
+export const Difficulty: typeof $Enums.Difficulty
 
 /**
  * ##  Prisma Client ʲˢ
@@ -203,6 +251,16 @@ export class PrismaClient<
     * ```
     */
   get account(): Prisma.AccountDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.skill`: Exposes CRUD operations for the **Skill** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Skills
+    * const skills = await prisma.skill.findMany()
+    * ```
+    */
+  get skill(): Prisma.SkillDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.session`: Exposes CRUD operations for the **Session** model.
@@ -686,6 +744,7 @@ export namespace Prisma {
     Interview: 'Interview',
     User: 'User',
     Account: 'Account',
+    Skill: 'Skill',
     Session: 'Session',
     VerificationToken: 'VerificationToken',
     InterviewSession: 'InterviewSession',
@@ -708,7 +767,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "interview" | "user" | "account" | "session" | "verificationToken" | "interviewSession" | "message"
+      modelProps: "interview" | "user" | "account" | "skill" | "session" | "verificationToken" | "interviewSession" | "message"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -931,6 +990,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AccountCountArgs<ExtArgs>
             result: $Utils.Optional<AccountCountAggregateOutputType> | number
+          }
+        }
+      }
+      Skill: {
+        payload: Prisma.$SkillPayload<ExtArgs>
+        fields: Prisma.SkillFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SkillFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SkillFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          findFirst: {
+            args: Prisma.SkillFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SkillFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          findMany: {
+            args: Prisma.SkillFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>[]
+          }
+          create: {
+            args: Prisma.SkillCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          createMany: {
+            args: Prisma.SkillCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SkillCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>[]
+          }
+          delete: {
+            args: Prisma.SkillDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          update: {
+            args: Prisma.SkillUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          deleteMany: {
+            args: Prisma.SkillDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SkillUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SkillUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>[]
+          }
+          upsert: {
+            args: Prisma.SkillUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillPayload>
+          }
+          aggregate: {
+            args: Prisma.SkillAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSkill>
+          }
+          groupBy: {
+            args: Prisma.SkillGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SkillGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SkillCountArgs<ExtArgs>
+            result: $Utils.Optional<SkillCountAggregateOutputType> | number
           }
         }
       }
@@ -1317,6 +1450,7 @@ export namespace Prisma {
     interview?: InterviewOmit
     user?: UserOmit
     account?: AccountOmit
+    skill?: SkillOmit
     session?: SessionOmit
     verificationToken?: VerificationTokenOmit
     interviewSession?: InterviewSessionOmit
@@ -1411,16 +1545,49 @@ export namespace Prisma {
 
 
   /**
+   * Count Type InterviewCountOutputType
+   */
+
+  export type InterviewCountOutputType = {
+    interviewSessions: number
+  }
+
+  export type InterviewCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    interviewSessions?: boolean | InterviewCountOutputTypeCountInterviewSessionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * InterviewCountOutputType without action
+   */
+  export type InterviewCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InterviewCountOutputType
+     */
+    select?: InterviewCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * InterviewCountOutputType without action
+   */
+  export type InterviewCountOutputTypeCountInterviewSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InterviewSessionWhereInput
+  }
+
+
+  /**
    * Count Type UserCountOutputType
    */
 
   export type UserCountOutputType = {
+    skills: number
     accounts: number
     sessions: number
     interviewSessions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    skills?: boolean | UserCountOutputTypeCountSkillsArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     interviewSessions?: boolean | UserCountOutputTypeCountInterviewSessionsArgs
@@ -1435,6 +1602,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSkillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SkillWhereInput
   }
 
   /**
@@ -1686,6 +1860,8 @@ export namespace Prisma {
     description?: boolean
     tags?: boolean
     createdAt?: boolean
+    interviewSessions?: boolean | Interview$interviewSessionsArgs<ExtArgs>
+    _count?: boolean | InterviewCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["interview"]>
 
   export type InterviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1725,10 +1901,18 @@ export namespace Prisma {
   }
 
   export type InterviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "role" | "type" | "difficulty" | "timeEstimate" | "description" | "tags" | "createdAt", ExtArgs["result"]["interview"]>
+  export type InterviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    interviewSessions?: boolean | Interview$interviewSessionsArgs<ExtArgs>
+    _count?: boolean | InterviewCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type InterviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type InterviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $InterviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Interview"
-    objects: {}
+    objects: {
+      interviewSessions: Prisma.$InterviewSessionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
@@ -2133,6 +2317,7 @@ export namespace Prisma {
    */
   export interface Prisma__InterviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    interviewSessions<T extends Interview$interviewSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Interview$interviewSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterviewSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2188,6 +2373,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * Filter, which Interview to fetch.
      */
     where: InterviewWhereUniqueInput
@@ -2206,6 +2395,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * Filter, which Interview to fetch.
      */
     where: InterviewWhereUniqueInput
@@ -2223,6 +2416,10 @@ export namespace Prisma {
      * Omit specific fields from the Interview
      */
     omit?: InterviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
     /**
      * Filter, which Interview to fetch.
      */
@@ -2272,6 +2469,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * Filter, which Interview to fetch.
      */
     where?: InterviewWhereInput
@@ -2320,6 +2521,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * Filter, which Interviews to fetch.
      */
     where?: InterviewWhereInput
@@ -2362,6 +2567,10 @@ export namespace Prisma {
      * Omit specific fields from the Interview
      */
     omit?: InterviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
     /**
      * The data needed to create a Interview.
      */
@@ -2410,6 +2619,10 @@ export namespace Prisma {
      * Omit specific fields from the Interview
      */
     omit?: InterviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
     /**
      * The data needed to update a Interview.
      */
@@ -2477,6 +2690,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * The filter to search for the Interview to update in case it exists.
      */
     where: InterviewWhereUniqueInput
@@ -2503,6 +2720,10 @@ export namespace Prisma {
      */
     omit?: InterviewOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    /**
      * Filter which Interview to delete.
      */
     where: InterviewWhereUniqueInput
@@ -2523,6 +2744,30 @@ export namespace Prisma {
   }
 
   /**
+   * Interview.interviewSessions
+   */
+  export type Interview$interviewSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InterviewSession
+     */
+    select?: InterviewSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InterviewSession
+     */
+    omit?: InterviewSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewSessionInclude<ExtArgs> | null
+    where?: InterviewSessionWhereInput
+    orderBy?: InterviewSessionOrderByWithRelationInput | InterviewSessionOrderByWithRelationInput[]
+    cursor?: InterviewSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InterviewSessionScalarFieldEnum | InterviewSessionScalarFieldEnum[]
+  }
+
+  /**
    * Interview without action
    */
   export type InterviewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2534,6 +2779,10 @@ export namespace Prisma {
      * Omit specific fields from the Interview
      */
     omit?: InterviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
   }
 
 
@@ -2553,6 +2802,7 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     password: string | null
+    resumeUrl: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2561,6 +2811,7 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     password: string | null
+    resumeUrl: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2569,6 +2820,7 @@ export namespace Prisma {
     fullName: number
     email: number
     password: number
+    resumeUrl: number
     _all: number
   }
 
@@ -2579,6 +2831,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    resumeUrl?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2587,6 +2840,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    resumeUrl?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2595,6 +2849,7 @@ export namespace Prisma {
     fullName?: true
     email?: true
     password?: true
+    resumeUrl?: true
     _all?: true
   }
 
@@ -2676,6 +2931,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2701,6 +2957,8 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    resumeUrl?: boolean
+    skills?: boolean | User$skillsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     interviewSessions?: boolean | User$interviewSessionsArgs<ExtArgs>
@@ -2713,6 +2971,7 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    resumeUrl?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2721,6 +2980,7 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    resumeUrl?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2729,10 +2989,12 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     password?: boolean
+    resumeUrl?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "fullName" | "email" | "password", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "fullName" | "email" | "password" | "resumeUrl", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    skills?: boolean | User$skillsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     interviewSessions?: boolean | User$interviewSessionsArgs<ExtArgs>
@@ -2744,6 +3006,7 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      skills: Prisma.$SkillPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       interviewSessions: Prisma.$InterviewSessionPayload<ExtArgs>[]
@@ -2754,6 +3017,7 @@ export namespace Prisma {
       fullName: string
       email: string
       password: string
+      resumeUrl: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3148,6 +3412,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    skills<T extends User$skillsArgs<ExtArgs> = {}>(args?: Subset<T, User$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interviewSessions<T extends User$interviewSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$interviewSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterviewSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3185,6 +3450,7 @@ export namespace Prisma {
     readonly fullName: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly resumeUrl: FieldRef<"User", 'String'>
   }
     
 
@@ -3570,6 +3836,30 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.skills
+   */
+  export type User$skillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    where?: SkillWhereInput
+    orderBy?: SkillOrderByWithRelationInput | SkillOrderByWithRelationInput[]
+    cursor?: SkillWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SkillScalarFieldEnum | SkillScalarFieldEnum[]
   }
 
   /**
@@ -4843,6 +5133,1051 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AccountInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Skill
+   */
+
+  export type AggregateSkill = {
+    _count: SkillCountAggregateOutputType | null
+    _min: SkillMinAggregateOutputType | null
+    _max: SkillMaxAggregateOutputType | null
+  }
+
+  export type SkillMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    level: string | null
+    userId: string | null
+  }
+
+  export type SkillMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    level: string | null
+    userId: string | null
+  }
+
+  export type SkillCountAggregateOutputType = {
+    id: number
+    name: number
+    level: number
+    userId: number
+    _all: number
+  }
+
+
+  export type SkillMinAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    userId?: true
+  }
+
+  export type SkillMaxAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    userId?: true
+  }
+
+  export type SkillCountAggregateInputType = {
+    id?: true
+    name?: true
+    level?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type SkillAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Skill to aggregate.
+     */
+    where?: SkillWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Skills to fetch.
+     */
+    orderBy?: SkillOrderByWithRelationInput | SkillOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SkillWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Skills from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Skills.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Skills
+    **/
+    _count?: true | SkillCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SkillMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SkillMaxAggregateInputType
+  }
+
+  export type GetSkillAggregateType<T extends SkillAggregateArgs> = {
+        [P in keyof T & keyof AggregateSkill]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSkill[P]>
+      : GetScalarType<T[P], AggregateSkill[P]>
+  }
+
+
+
+
+  export type SkillGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SkillWhereInput
+    orderBy?: SkillOrderByWithAggregationInput | SkillOrderByWithAggregationInput[]
+    by: SkillScalarFieldEnum[] | SkillScalarFieldEnum
+    having?: SkillScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SkillCountAggregateInputType | true
+    _min?: SkillMinAggregateInputType
+    _max?: SkillMaxAggregateInputType
+  }
+
+  export type SkillGroupByOutputType = {
+    id: string
+    name: string
+    level: string
+    userId: string
+    _count: SkillCountAggregateOutputType | null
+    _min: SkillMinAggregateOutputType | null
+    _max: SkillMaxAggregateOutputType | null
+  }
+
+  type GetSkillGroupByPayload<T extends SkillGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SkillGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SkillGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SkillGroupByOutputType[P]>
+            : GetScalarType<T[P], SkillGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SkillSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skill"]>
+
+  export type SkillSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skill"]>
+
+  export type SkillSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skill"]>
+
+  export type SkillSelectScalar = {
+    id?: boolean
+    name?: boolean
+    level?: boolean
+    userId?: boolean
+  }
+
+  export type SkillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "level" | "userId", ExtArgs["result"]["skill"]>
+  export type SkillInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SkillIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SkillIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SkillPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Skill"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      level: string
+      userId: string
+    }, ExtArgs["result"]["skill"]>
+    composites: {}
+  }
+
+  type SkillGetPayload<S extends boolean | null | undefined | SkillDefaultArgs> = $Result.GetResult<Prisma.$SkillPayload, S>
+
+  type SkillCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SkillFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SkillCountAggregateInputType | true
+    }
+
+  export interface SkillDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Skill'], meta: { name: 'Skill' } }
+    /**
+     * Find zero or one Skill that matches the filter.
+     * @param {SkillFindUniqueArgs} args - Arguments to find a Skill
+     * @example
+     * // Get one Skill
+     * const skill = await prisma.skill.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SkillFindUniqueArgs>(args: SelectSubset<T, SkillFindUniqueArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Skill that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SkillFindUniqueOrThrowArgs} args - Arguments to find a Skill
+     * @example
+     * // Get one Skill
+     * const skill = await prisma.skill.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SkillFindUniqueOrThrowArgs>(args: SelectSubset<T, SkillFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Skill that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillFindFirstArgs} args - Arguments to find a Skill
+     * @example
+     * // Get one Skill
+     * const skill = await prisma.skill.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SkillFindFirstArgs>(args?: SelectSubset<T, SkillFindFirstArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Skill that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillFindFirstOrThrowArgs} args - Arguments to find a Skill
+     * @example
+     * // Get one Skill
+     * const skill = await prisma.skill.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SkillFindFirstOrThrowArgs>(args?: SelectSubset<T, SkillFindFirstOrThrowArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Skills that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Skills
+     * const skills = await prisma.skill.findMany()
+     * 
+     * // Get first 10 Skills
+     * const skills = await prisma.skill.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const skillWithIdOnly = await prisma.skill.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SkillFindManyArgs>(args?: SelectSubset<T, SkillFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Skill.
+     * @param {SkillCreateArgs} args - Arguments to create a Skill.
+     * @example
+     * // Create one Skill
+     * const Skill = await prisma.skill.create({
+     *   data: {
+     *     // ... data to create a Skill
+     *   }
+     * })
+     * 
+     */
+    create<T extends SkillCreateArgs>(args: SelectSubset<T, SkillCreateArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Skills.
+     * @param {SkillCreateManyArgs} args - Arguments to create many Skills.
+     * @example
+     * // Create many Skills
+     * const skill = await prisma.skill.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SkillCreateManyArgs>(args?: SelectSubset<T, SkillCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Skills and returns the data saved in the database.
+     * @param {SkillCreateManyAndReturnArgs} args - Arguments to create many Skills.
+     * @example
+     * // Create many Skills
+     * const skill = await prisma.skill.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Skills and only return the `id`
+     * const skillWithIdOnly = await prisma.skill.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SkillCreateManyAndReturnArgs>(args?: SelectSubset<T, SkillCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Skill.
+     * @param {SkillDeleteArgs} args - Arguments to delete one Skill.
+     * @example
+     * // Delete one Skill
+     * const Skill = await prisma.skill.delete({
+     *   where: {
+     *     // ... filter to delete one Skill
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SkillDeleteArgs>(args: SelectSubset<T, SkillDeleteArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Skill.
+     * @param {SkillUpdateArgs} args - Arguments to update one Skill.
+     * @example
+     * // Update one Skill
+     * const skill = await prisma.skill.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SkillUpdateArgs>(args: SelectSubset<T, SkillUpdateArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Skills.
+     * @param {SkillDeleteManyArgs} args - Arguments to filter Skills to delete.
+     * @example
+     * // Delete a few Skills
+     * const { count } = await prisma.skill.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SkillDeleteManyArgs>(args?: SelectSubset<T, SkillDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Skills.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Skills
+     * const skill = await prisma.skill.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SkillUpdateManyArgs>(args: SelectSubset<T, SkillUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Skills and returns the data updated in the database.
+     * @param {SkillUpdateManyAndReturnArgs} args - Arguments to update many Skills.
+     * @example
+     * // Update many Skills
+     * const skill = await prisma.skill.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Skills and only return the `id`
+     * const skillWithIdOnly = await prisma.skill.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SkillUpdateManyAndReturnArgs>(args: SelectSubset<T, SkillUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Skill.
+     * @param {SkillUpsertArgs} args - Arguments to update or create a Skill.
+     * @example
+     * // Update or create a Skill
+     * const skill = await prisma.skill.upsert({
+     *   create: {
+     *     // ... data to create a Skill
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Skill we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SkillUpsertArgs>(args: SelectSubset<T, SkillUpsertArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Skills.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillCountArgs} args - Arguments to filter Skills to count.
+     * @example
+     * // Count the number of Skills
+     * const count = await prisma.skill.count({
+     *   where: {
+     *     // ... the filter for the Skills we want to count
+     *   }
+     * })
+    **/
+    count<T extends SkillCountArgs>(
+      args?: Subset<T, SkillCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SkillCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Skill.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SkillAggregateArgs>(args: Subset<T, SkillAggregateArgs>): Prisma.PrismaPromise<GetSkillAggregateType<T>>
+
+    /**
+     * Group by Skill.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SkillGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SkillGroupByArgs['orderBy'] }
+        : { orderBy?: SkillGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SkillGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSkillGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Skill model
+   */
+  readonly fields: SkillFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Skill.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SkillClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Skill model
+   */
+  interface SkillFieldRefs {
+    readonly id: FieldRef<"Skill", 'String'>
+    readonly name: FieldRef<"Skill", 'String'>
+    readonly level: FieldRef<"Skill", 'String'>
+    readonly userId: FieldRef<"Skill", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Skill findUnique
+   */
+  export type SkillFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter, which Skill to fetch.
+     */
+    where: SkillWhereUniqueInput
+  }
+
+  /**
+   * Skill findUniqueOrThrow
+   */
+  export type SkillFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter, which Skill to fetch.
+     */
+    where: SkillWhereUniqueInput
+  }
+
+  /**
+   * Skill findFirst
+   */
+  export type SkillFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter, which Skill to fetch.
+     */
+    where?: SkillWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Skills to fetch.
+     */
+    orderBy?: SkillOrderByWithRelationInput | SkillOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Skills.
+     */
+    cursor?: SkillWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Skills from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Skills.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Skills.
+     */
+    distinct?: SkillScalarFieldEnum | SkillScalarFieldEnum[]
+  }
+
+  /**
+   * Skill findFirstOrThrow
+   */
+  export type SkillFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter, which Skill to fetch.
+     */
+    where?: SkillWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Skills to fetch.
+     */
+    orderBy?: SkillOrderByWithRelationInput | SkillOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Skills.
+     */
+    cursor?: SkillWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Skills from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Skills.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Skills.
+     */
+    distinct?: SkillScalarFieldEnum | SkillScalarFieldEnum[]
+  }
+
+  /**
+   * Skill findMany
+   */
+  export type SkillFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter, which Skills to fetch.
+     */
+    where?: SkillWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Skills to fetch.
+     */
+    orderBy?: SkillOrderByWithRelationInput | SkillOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Skills.
+     */
+    cursor?: SkillWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Skills from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Skills.
+     */
+    skip?: number
+    distinct?: SkillScalarFieldEnum | SkillScalarFieldEnum[]
+  }
+
+  /**
+   * Skill create
+   */
+  export type SkillCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Skill.
+     */
+    data: XOR<SkillCreateInput, SkillUncheckedCreateInput>
+  }
+
+  /**
+   * Skill createMany
+   */
+  export type SkillCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Skills.
+     */
+    data: SkillCreateManyInput | SkillCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Skill createManyAndReturn
+   */
+  export type SkillCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * The data used to create many Skills.
+     */
+    data: SkillCreateManyInput | SkillCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Skill update
+   */
+  export type SkillUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Skill.
+     */
+    data: XOR<SkillUpdateInput, SkillUncheckedUpdateInput>
+    /**
+     * Choose, which Skill to update.
+     */
+    where: SkillWhereUniqueInput
+  }
+
+  /**
+   * Skill updateMany
+   */
+  export type SkillUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Skills.
+     */
+    data: XOR<SkillUpdateManyMutationInput, SkillUncheckedUpdateManyInput>
+    /**
+     * Filter which Skills to update
+     */
+    where?: SkillWhereInput
+    /**
+     * Limit how many Skills to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Skill updateManyAndReturn
+   */
+  export type SkillUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * The data used to update Skills.
+     */
+    data: XOR<SkillUpdateManyMutationInput, SkillUncheckedUpdateManyInput>
+    /**
+     * Filter which Skills to update
+     */
+    where?: SkillWhereInput
+    /**
+     * Limit how many Skills to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Skill upsert
+   */
+  export type SkillUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Skill to update in case it exists.
+     */
+    where: SkillWhereUniqueInput
+    /**
+     * In case the Skill found by the `where` argument doesn't exist, create a new Skill with this data.
+     */
+    create: XOR<SkillCreateInput, SkillUncheckedCreateInput>
+    /**
+     * In case the Skill was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SkillUpdateInput, SkillUncheckedUpdateInput>
+  }
+
+  /**
+   * Skill delete
+   */
+  export type SkillDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
+    /**
+     * Filter which Skill to delete.
+     */
+    where: SkillWhereUniqueInput
+  }
+
+  /**
+   * Skill deleteMany
+   */
+  export type SkillDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Skills to delete
+     */
+    where?: SkillWhereInput
+    /**
+     * Limit how many Skills to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Skill without action
+   */
+  export type SkillDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Skill
+     */
+    select?: SkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Skill
+     */
+    omit?: SkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillInclude<ExtArgs> | null
   }
 
 
@@ -6873,6 +8208,12 @@ export namespace Prisma {
   export type InterviewSessionMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    company: string | null
+    jobRole: string | null
+    interviewKind: $Enums.InterviewKind | null
+    difficulty: $Enums.Difficulty | null
+    language: string | null
+    interviewId: string | null
     title: string | null
     description: string | null
     status: string | null
@@ -6883,6 +8224,12 @@ export namespace Prisma {
   export type InterviewSessionMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    company: string | null
+    jobRole: string | null
+    interviewKind: $Enums.InterviewKind | null
+    difficulty: $Enums.Difficulty | null
+    language: string | null
+    interviewId: string | null
     title: string | null
     description: string | null
     status: string | null
@@ -6893,6 +8240,12 @@ export namespace Prisma {
   export type InterviewSessionCountAggregateOutputType = {
     id: number
     userId: number
+    company: number
+    jobRole: number
+    interviewKind: number
+    difficulty: number
+    language: number
+    interviewId: number
     title: number
     description: number
     settings: number
@@ -6906,6 +8259,12 @@ export namespace Prisma {
   export type InterviewSessionMinAggregateInputType = {
     id?: true
     userId?: true
+    company?: true
+    jobRole?: true
+    interviewKind?: true
+    difficulty?: true
+    language?: true
+    interviewId?: true
     title?: true
     description?: true
     status?: true
@@ -6916,6 +8275,12 @@ export namespace Prisma {
   export type InterviewSessionMaxAggregateInputType = {
     id?: true
     userId?: true
+    company?: true
+    jobRole?: true
+    interviewKind?: true
+    difficulty?: true
+    language?: true
+    interviewId?: true
     title?: true
     description?: true
     status?: true
@@ -6926,6 +8291,12 @@ export namespace Prisma {
   export type InterviewSessionCountAggregateInputType = {
     id?: true
     userId?: true
+    company?: true
+    jobRole?: true
+    interviewKind?: true
+    difficulty?: true
+    language?: true
+    interviewId?: true
     title?: true
     description?: true
     settings?: true
@@ -7010,6 +8381,12 @@ export namespace Prisma {
   export type InterviewSessionGroupByOutputType = {
     id: string
     userId: string
+    company: string | null
+    jobRole: string | null
+    interviewKind: $Enums.InterviewKind | null
+    difficulty: $Enums.Difficulty | null
+    language: string | null
+    interviewId: string | null
     title: string
     description: string
     settings: JsonValue
@@ -7038,6 +8415,12 @@ export namespace Prisma {
   export type InterviewSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    company?: boolean
+    jobRole?: boolean
+    interviewKind?: boolean
+    difficulty?: boolean
+    language?: boolean
+    interviewId?: boolean
     title?: boolean
     description?: boolean
     settings?: boolean
@@ -7045,6 +8428,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
     messages?: boolean | InterviewSession$messagesArgs<ExtArgs>
     _count?: boolean | InterviewSessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["interviewSession"]>
@@ -7052,6 +8436,12 @@ export namespace Prisma {
   export type InterviewSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    company?: boolean
+    jobRole?: boolean
+    interviewKind?: boolean
+    difficulty?: boolean
+    language?: boolean
+    interviewId?: boolean
     title?: boolean
     description?: boolean
     settings?: boolean
@@ -7059,11 +8449,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
   }, ExtArgs["result"]["interviewSession"]>
 
   export type InterviewSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    company?: boolean
+    jobRole?: boolean
+    interviewKind?: boolean
+    difficulty?: boolean
+    language?: boolean
+    interviewId?: boolean
     title?: boolean
     description?: boolean
     settings?: boolean
@@ -7071,11 +8468,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
   }, ExtArgs["result"]["interviewSession"]>
 
   export type InterviewSessionSelectScalar = {
     id?: boolean
     userId?: boolean
+    company?: boolean
+    jobRole?: boolean
+    interviewKind?: boolean
+    difficulty?: boolean
+    language?: boolean
+    interviewId?: boolean
     title?: boolean
     description?: boolean
     settings?: boolean
@@ -7084,28 +8488,38 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type InterviewSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "settings" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewSession"]>
+  export type InterviewSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "company" | "jobRole" | "interviewKind" | "difficulty" | "language" | "interviewId" | "title" | "description" | "settings" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewSession"]>
   export type InterviewSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
     messages?: boolean | InterviewSession$messagesArgs<ExtArgs>
     _count?: boolean | InterviewSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InterviewSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
   }
   export type InterviewSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    interview?: boolean | InterviewSession$interviewArgs<ExtArgs>
   }
 
   export type $InterviewSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "InterviewSession"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      interview: Prisma.$InterviewPayload<ExtArgs> | null
       messages: Prisma.$MessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      company: string | null
+      jobRole: string | null
+      interviewKind: $Enums.InterviewKind | null
+      difficulty: $Enums.Difficulty | null
+      language: string | null
+      interviewId: string | null
       title: string
       description: string
       settings: Prisma.JsonValue
@@ -7507,6 +8921,7 @@ export namespace Prisma {
   export interface Prisma__InterviewSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    interview<T extends InterviewSession$interviewArgs<ExtArgs> = {}>(args?: Subset<T, InterviewSession$interviewArgs<ExtArgs>>): Prisma__InterviewClient<$Result.GetResult<Prisma.$InterviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     messages<T extends InterviewSession$messagesArgs<ExtArgs> = {}>(args?: Subset<T, InterviewSession$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7539,6 +8954,12 @@ export namespace Prisma {
   interface InterviewSessionFieldRefs {
     readonly id: FieldRef<"InterviewSession", 'String'>
     readonly userId: FieldRef<"InterviewSession", 'String'>
+    readonly company: FieldRef<"InterviewSession", 'String'>
+    readonly jobRole: FieldRef<"InterviewSession", 'String'>
+    readonly interviewKind: FieldRef<"InterviewSession", 'InterviewKind'>
+    readonly difficulty: FieldRef<"InterviewSession", 'Difficulty'>
+    readonly language: FieldRef<"InterviewSession", 'String'>
+    readonly interviewId: FieldRef<"InterviewSession", 'String'>
     readonly title: FieldRef<"InterviewSession", 'String'>
     readonly description: FieldRef<"InterviewSession", 'String'>
     readonly settings: FieldRef<"InterviewSession", 'Json'>
@@ -7941,6 +9362,25 @@ export namespace Prisma {
   }
 
   /**
+   * InterviewSession.interview
+   */
+  export type InterviewSession$interviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Interview
+     */
+    select?: InterviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Interview
+     */
+    omit?: InterviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterviewInclude<ExtArgs> | null
+    where?: InterviewWhereInput
+  }
+
+  /**
    * InterviewSession.messages
    */
   export type InterviewSession$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7989,8 +9429,18 @@ export namespace Prisma {
 
   export type AggregateMessage = {
     _count: MessageCountAggregateOutputType | null
+    _avg: MessageAvgAggregateOutputType | null
+    _sum: MessageSumAggregateOutputType | null
     _min: MessageMinAggregateOutputType | null
     _max: MessageMaxAggregateOutputType | null
+  }
+
+  export type MessageAvgAggregateOutputType = {
+    turn: number | null
+  }
+
+  export type MessageSumAggregateOutputType = {
+    turn: number | null
   }
 
   export type MessageMinAggregateOutputType = {
@@ -7998,6 +9448,13 @@ export namespace Prisma {
     sessionId: string | null
     role: string | null
     content: string | null
+    topic: string | null
+    question: string | null
+    briefFeedback: string | null
+    turn: number | null
+    type: string | null
+    mediaUrl: string | null
+    transcript: string | null
     timestamp: Date | null
   }
 
@@ -8006,6 +9463,13 @@ export namespace Prisma {
     sessionId: string | null
     role: string | null
     content: string | null
+    topic: string | null
+    question: string | null
+    briefFeedback: string | null
+    turn: number | null
+    type: string | null
+    mediaUrl: string | null
+    transcript: string | null
     timestamp: Date | null
   }
 
@@ -8014,16 +9478,38 @@ export namespace Prisma {
     sessionId: number
     role: number
     content: number
+    topic: number
+    question: number
+    briefFeedback: number
+    turn: number
+    type: number
+    mediaUrl: number
+    transcript: number
     timestamp: number
     _all: number
   }
 
+
+  export type MessageAvgAggregateInputType = {
+    turn?: true
+  }
+
+  export type MessageSumAggregateInputType = {
+    turn?: true
+  }
 
   export type MessageMinAggregateInputType = {
     id?: true
     sessionId?: true
     role?: true
     content?: true
+    topic?: true
+    question?: true
+    briefFeedback?: true
+    turn?: true
+    type?: true
+    mediaUrl?: true
+    transcript?: true
     timestamp?: true
   }
 
@@ -8032,6 +9518,13 @@ export namespace Prisma {
     sessionId?: true
     role?: true
     content?: true
+    topic?: true
+    question?: true
+    briefFeedback?: true
+    turn?: true
+    type?: true
+    mediaUrl?: true
+    transcript?: true
     timestamp?: true
   }
 
@@ -8040,6 +9533,13 @@ export namespace Prisma {
     sessionId?: true
     role?: true
     content?: true
+    topic?: true
+    question?: true
+    briefFeedback?: true
+    turn?: true
+    type?: true
+    mediaUrl?: true
+    transcript?: true
     timestamp?: true
     _all?: true
   }
@@ -8082,6 +9582,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: MessageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MessageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: MessageMinAggregateInputType
@@ -8112,6 +9624,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: MessageCountAggregateInputType | true
+    _avg?: MessageAvgAggregateInputType
+    _sum?: MessageSumAggregateInputType
     _min?: MessageMinAggregateInputType
     _max?: MessageMaxAggregateInputType
   }
@@ -8121,8 +9635,17 @@ export namespace Prisma {
     sessionId: string
     role: string
     content: string
+    topic: string | null
+    question: string | null
+    briefFeedback: string | null
+    turn: number | null
+    type: string
+    mediaUrl: string | null
+    transcript: string | null
     timestamp: Date
     _count: MessageCountAggregateOutputType | null
+    _avg: MessageAvgAggregateOutputType | null
+    _sum: MessageSumAggregateOutputType | null
     _min: MessageMinAggregateOutputType | null
     _max: MessageMaxAggregateOutputType | null
   }
@@ -8146,6 +9669,13 @@ export namespace Prisma {
     sessionId?: boolean
     role?: boolean
     content?: boolean
+    topic?: boolean
+    question?: boolean
+    briefFeedback?: boolean
+    turn?: boolean
+    type?: boolean
+    mediaUrl?: boolean
+    transcript?: boolean
     timestamp?: boolean
     session?: boolean | InterviewSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -8155,6 +9685,13 @@ export namespace Prisma {
     sessionId?: boolean
     role?: boolean
     content?: boolean
+    topic?: boolean
+    question?: boolean
+    briefFeedback?: boolean
+    turn?: boolean
+    type?: boolean
+    mediaUrl?: boolean
+    transcript?: boolean
     timestamp?: boolean
     session?: boolean | InterviewSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -8164,6 +9701,13 @@ export namespace Prisma {
     sessionId?: boolean
     role?: boolean
     content?: boolean
+    topic?: boolean
+    question?: boolean
+    briefFeedback?: boolean
+    turn?: boolean
+    type?: boolean
+    mediaUrl?: boolean
+    transcript?: boolean
     timestamp?: boolean
     session?: boolean | InterviewSessionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -8173,10 +9717,17 @@ export namespace Prisma {
     sessionId?: boolean
     role?: boolean
     content?: boolean
+    topic?: boolean
+    question?: boolean
+    briefFeedback?: boolean
+    turn?: boolean
+    type?: boolean
+    mediaUrl?: boolean
+    transcript?: boolean
     timestamp?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "role" | "content" | "timestamp", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "role" | "content" | "topic" | "question" | "briefFeedback" | "turn" | "type" | "mediaUrl" | "transcript" | "timestamp", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | InterviewSessionDefaultArgs<ExtArgs>
   }
@@ -8197,6 +9748,13 @@ export namespace Prisma {
       sessionId: string
       role: string
       content: string
+      topic: string | null
+      question: string | null
+      briefFeedback: string | null
+      turn: number | null
+      type: string
+      mediaUrl: string | null
+      transcript: string | null
       timestamp: Date
     }, ExtArgs["result"]["message"]>
     composites: {}
@@ -8626,6 +10184,13 @@ export namespace Prisma {
     readonly sessionId: FieldRef<"Message", 'String'>
     readonly role: FieldRef<"Message", 'String'>
     readonly content: FieldRef<"Message", 'String'>
+    readonly topic: FieldRef<"Message", 'String'>
+    readonly question: FieldRef<"Message", 'String'>
+    readonly briefFeedback: FieldRef<"Message", 'String'>
+    readonly turn: FieldRef<"Message", 'Int'>
+    readonly type: FieldRef<"Message", 'String'>
+    readonly mediaUrl: FieldRef<"Message", 'String'>
+    readonly transcript: FieldRef<"Message", 'String'>
     readonly timestamp: FieldRef<"Message", 'DateTime'>
   }
     
@@ -9075,7 +10640,8 @@ export namespace Prisma {
     username: 'username',
     fullName: 'fullName',
     email: 'email',
-    password: 'password'
+    password: 'password',
+    resumeUrl: 'resumeUrl'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9097,6 +10663,16 @@ export namespace Prisma {
   };
 
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+  export const SkillScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    level: 'level',
+    userId: 'userId'
+  };
+
+  export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]
 
 
   export const SessionScalarFieldEnum: {
@@ -9121,6 +10697,12 @@ export namespace Prisma {
   export const InterviewSessionScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    company: 'company',
+    jobRole: 'jobRole',
+    interviewKind: 'interviewKind',
+    difficulty: 'difficulty',
+    language: 'language',
+    interviewId: 'interviewId',
     title: 'title',
     description: 'description',
     settings: 'settings',
@@ -9137,6 +10719,13 @@ export namespace Prisma {
     sessionId: 'sessionId',
     role: 'role',
     content: 'content',
+    topic: 'topic',
+    question: 'question',
+    briefFeedback: 'briefFeedback',
+    turn: 'turn',
+    type: 'type',
+    mediaUrl: 'mediaUrl',
+    transcript: 'transcript',
     timestamp: 'timestamp'
   };
 
@@ -9231,6 +10820,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'InterviewKind'
+   */
+  export type EnumInterviewKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InterviewKind'>
+    
+
+
+  /**
+   * Reference to a field of type 'InterviewKind[]'
+   */
+  export type ListEnumInterviewKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InterviewKind[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Difficulty'
+   */
+  export type EnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty'>
+    
+
+
+  /**
+   * Reference to a field of type 'Difficulty[]'
+   */
+  export type ListEnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -9274,6 +10891,7 @@ export namespace Prisma {
     description?: StringFilter<"Interview"> | string
     tags?: StringNullableListFilter<"Interview">
     createdAt?: DateTimeFilter<"Interview"> | Date | string
+    interviewSessions?: InterviewSessionListRelationFilter
   }
 
   export type InterviewOrderByWithRelationInput = {
@@ -9286,6 +10904,7 @@ export namespace Prisma {
     description?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
+    interviewSessions?: InterviewSessionOrderByRelationAggregateInput
   }
 
   export type InterviewWhereUniqueInput = Prisma.AtLeast<{
@@ -9301,6 +10920,7 @@ export namespace Prisma {
     description?: StringFilter<"Interview"> | string
     tags?: StringNullableListFilter<"Interview">
     createdAt?: DateTimeFilter<"Interview"> | Date | string
+    interviewSessions?: InterviewSessionListRelationFilter
   }, "id">
 
   export type InterviewOrderByWithAggregationInput = {
@@ -9342,6 +10962,8 @@ export namespace Prisma {
     fullName?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    resumeUrl?: StringNullableFilter<"User"> | string | null
+    skills?: SkillListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     interviewSessions?: InterviewSessionListRelationFilter
@@ -9353,6 +10975,8 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    resumeUrl?: SortOrderInput | SortOrder
+    skills?: SkillOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     interviewSessions?: InterviewSessionOrderByRelationAggregateInput
@@ -9367,6 +10991,8 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     fullName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    resumeUrl?: StringNullableFilter<"User"> | string | null
+    skills?: SkillListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     interviewSessions?: InterviewSessionListRelationFilter
@@ -9378,6 +11004,7 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    resumeUrl?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -9392,6 +11019,7 @@ export namespace Prisma {
     fullName?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    resumeUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type AccountWhereInput = {
@@ -9485,6 +11113,56 @@ export namespace Prisma {
     scope?: StringNullableWithAggregatesFilter<"Account"> | string | null
     id_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
     session_state?: StringNullableWithAggregatesFilter<"Account"> | string | null
+  }
+
+  export type SkillWhereInput = {
+    AND?: SkillWhereInput | SkillWhereInput[]
+    OR?: SkillWhereInput[]
+    NOT?: SkillWhereInput | SkillWhereInput[]
+    id?: StringFilter<"Skill"> | string
+    name?: StringFilter<"Skill"> | string
+    level?: StringFilter<"Skill"> | string
+    userId?: StringFilter<"Skill"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SkillOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SkillWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SkillWhereInput | SkillWhereInput[]
+    OR?: SkillWhereInput[]
+    NOT?: SkillWhereInput | SkillWhereInput[]
+    name?: StringFilter<"Skill"> | string
+    level?: StringFilter<"Skill"> | string
+    userId?: StringFilter<"Skill"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SkillOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    userId?: SortOrder
+    _count?: SkillCountOrderByAggregateInput
+    _max?: SkillMaxOrderByAggregateInput
+    _min?: SkillMinOrderByAggregateInput
+  }
+
+  export type SkillScalarWhereWithAggregatesInput = {
+    AND?: SkillScalarWhereWithAggregatesInput | SkillScalarWhereWithAggregatesInput[]
+    OR?: SkillScalarWhereWithAggregatesInput[]
+    NOT?: SkillScalarWhereWithAggregatesInput | SkillScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Skill"> | string
+    name?: StringWithAggregatesFilter<"Skill"> | string
+    level?: StringWithAggregatesFilter<"Skill"> | string
+    userId?: StringWithAggregatesFilter<"Skill"> | string
   }
 
   export type SessionWhereInput = {
@@ -9586,6 +11264,12 @@ export namespace Prisma {
     NOT?: InterviewSessionWhereInput | InterviewSessionWhereInput[]
     id?: StringFilter<"InterviewSession"> | string
     userId?: StringFilter<"InterviewSession"> | string
+    company?: StringNullableFilter<"InterviewSession"> | string | null
+    jobRole?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewKind?: EnumInterviewKindNullableFilter<"InterviewSession"> | $Enums.InterviewKind | null
+    difficulty?: EnumDifficultyNullableFilter<"InterviewSession"> | $Enums.Difficulty | null
+    language?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewId?: StringNullableFilter<"InterviewSession"> | string | null
     title?: StringFilter<"InterviewSession"> | string
     description?: StringFilter<"InterviewSession"> | string
     settings?: JsonFilter<"InterviewSession">
@@ -9593,12 +11277,19 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"InterviewSession"> | Date | string
     updatedAt?: DateTimeFilter<"InterviewSession"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    interview?: XOR<InterviewNullableScalarRelationFilter, InterviewWhereInput> | null
     messages?: MessageListRelationFilter
   }
 
   export type InterviewSessionOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    company?: SortOrderInput | SortOrder
+    jobRole?: SortOrderInput | SortOrder
+    interviewKind?: SortOrderInput | SortOrder
+    difficulty?: SortOrderInput | SortOrder
+    language?: SortOrderInput | SortOrder
+    interviewId?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrder
     settings?: SortOrder
@@ -9606,6 +11297,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    interview?: InterviewOrderByWithRelationInput
     messages?: MessageOrderByRelationAggregateInput
   }
 
@@ -9615,6 +11307,12 @@ export namespace Prisma {
     OR?: InterviewSessionWhereInput[]
     NOT?: InterviewSessionWhereInput | InterviewSessionWhereInput[]
     userId?: StringFilter<"InterviewSession"> | string
+    company?: StringNullableFilter<"InterviewSession"> | string | null
+    jobRole?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewKind?: EnumInterviewKindNullableFilter<"InterviewSession"> | $Enums.InterviewKind | null
+    difficulty?: EnumDifficultyNullableFilter<"InterviewSession"> | $Enums.Difficulty | null
+    language?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewId?: StringNullableFilter<"InterviewSession"> | string | null
     title?: StringFilter<"InterviewSession"> | string
     description?: StringFilter<"InterviewSession"> | string
     settings?: JsonFilter<"InterviewSession">
@@ -9622,12 +11320,19 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"InterviewSession"> | Date | string
     updatedAt?: DateTimeFilter<"InterviewSession"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    interview?: XOR<InterviewNullableScalarRelationFilter, InterviewWhereInput> | null
     messages?: MessageListRelationFilter
   }, "id">
 
   export type InterviewSessionOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    company?: SortOrderInput | SortOrder
+    jobRole?: SortOrderInput | SortOrder
+    interviewKind?: SortOrderInput | SortOrder
+    difficulty?: SortOrderInput | SortOrder
+    language?: SortOrderInput | SortOrder
+    interviewId?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrder
     settings?: SortOrder
@@ -9645,6 +11350,12 @@ export namespace Prisma {
     NOT?: InterviewSessionScalarWhereWithAggregatesInput | InterviewSessionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"InterviewSession"> | string
     userId?: StringWithAggregatesFilter<"InterviewSession"> | string
+    company?: StringNullableWithAggregatesFilter<"InterviewSession"> | string | null
+    jobRole?: StringNullableWithAggregatesFilter<"InterviewSession"> | string | null
+    interviewKind?: EnumInterviewKindNullableWithAggregatesFilter<"InterviewSession"> | $Enums.InterviewKind | null
+    difficulty?: EnumDifficultyNullableWithAggregatesFilter<"InterviewSession"> | $Enums.Difficulty | null
+    language?: StringNullableWithAggregatesFilter<"InterviewSession"> | string | null
+    interviewId?: StringNullableWithAggregatesFilter<"InterviewSession"> | string | null
     title?: StringWithAggregatesFilter<"InterviewSession"> | string
     description?: StringWithAggregatesFilter<"InterviewSession"> | string
     settings?: JsonWithAggregatesFilter<"InterviewSession">
@@ -9661,6 +11372,13 @@ export namespace Prisma {
     sessionId?: StringFilter<"Message"> | string
     role?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
+    topic?: StringNullableFilter<"Message"> | string | null
+    question?: StringNullableFilter<"Message"> | string | null
+    briefFeedback?: StringNullableFilter<"Message"> | string | null
+    turn?: IntNullableFilter<"Message"> | number | null
+    type?: StringFilter<"Message"> | string
+    mediaUrl?: StringNullableFilter<"Message"> | string | null
+    transcript?: StringNullableFilter<"Message"> | string | null
     timestamp?: DateTimeFilter<"Message"> | Date | string
     session?: XOR<InterviewSessionScalarRelationFilter, InterviewSessionWhereInput>
   }
@@ -9670,6 +11388,13 @@ export namespace Prisma {
     sessionId?: SortOrder
     role?: SortOrder
     content?: SortOrder
+    topic?: SortOrderInput | SortOrder
+    question?: SortOrderInput | SortOrder
+    briefFeedback?: SortOrderInput | SortOrder
+    turn?: SortOrderInput | SortOrder
+    type?: SortOrder
+    mediaUrl?: SortOrderInput | SortOrder
+    transcript?: SortOrderInput | SortOrder
     timestamp?: SortOrder
     session?: InterviewSessionOrderByWithRelationInput
   }
@@ -9682,6 +11407,13 @@ export namespace Prisma {
     sessionId?: StringFilter<"Message"> | string
     role?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
+    topic?: StringNullableFilter<"Message"> | string | null
+    question?: StringNullableFilter<"Message"> | string | null
+    briefFeedback?: StringNullableFilter<"Message"> | string | null
+    turn?: IntNullableFilter<"Message"> | number | null
+    type?: StringFilter<"Message"> | string
+    mediaUrl?: StringNullableFilter<"Message"> | string | null
+    transcript?: StringNullableFilter<"Message"> | string | null
     timestamp?: DateTimeFilter<"Message"> | Date | string
     session?: XOR<InterviewSessionScalarRelationFilter, InterviewSessionWhereInput>
   }, "id">
@@ -9691,10 +11423,19 @@ export namespace Prisma {
     sessionId?: SortOrder
     role?: SortOrder
     content?: SortOrder
+    topic?: SortOrderInput | SortOrder
+    question?: SortOrderInput | SortOrder
+    briefFeedback?: SortOrderInput | SortOrder
+    turn?: SortOrderInput | SortOrder
+    type?: SortOrder
+    mediaUrl?: SortOrderInput | SortOrder
+    transcript?: SortOrderInput | SortOrder
     timestamp?: SortOrder
     _count?: MessageCountOrderByAggregateInput
+    _avg?: MessageAvgOrderByAggregateInput
     _max?: MessageMaxOrderByAggregateInput
     _min?: MessageMinOrderByAggregateInput
+    _sum?: MessageSumOrderByAggregateInput
   }
 
   export type MessageScalarWhereWithAggregatesInput = {
@@ -9705,6 +11446,13 @@ export namespace Prisma {
     sessionId?: StringWithAggregatesFilter<"Message"> | string
     role?: StringWithAggregatesFilter<"Message"> | string
     content?: StringWithAggregatesFilter<"Message"> | string
+    topic?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    question?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    briefFeedback?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    turn?: IntNullableWithAggregatesFilter<"Message"> | number | null
+    type?: StringWithAggregatesFilter<"Message"> | string
+    mediaUrl?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    transcript?: StringNullableWithAggregatesFilter<"Message"> | string | null
     timestamp?: DateTimeWithAggregatesFilter<"Message"> | Date | string
   }
 
@@ -9718,6 +11466,7 @@ export namespace Prisma {
     description: string
     tags?: InterviewCreatetagsInput | string[]
     createdAt?: Date | string
+    interviewSessions?: InterviewSessionCreateNestedManyWithoutInterviewInput
   }
 
   export type InterviewUncheckedCreateInput = {
@@ -9730,6 +11479,7 @@ export namespace Prisma {
     description: string
     tags?: InterviewCreatetagsInput | string[]
     createdAt?: Date | string
+    interviewSessions?: InterviewSessionUncheckedCreateNestedManyWithoutInterviewInput
   }
 
   export type InterviewUpdateInput = {
@@ -9742,6 +11492,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     tags?: InterviewUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    interviewSessions?: InterviewSessionUpdateManyWithoutInterviewNestedInput
   }
 
   export type InterviewUncheckedUpdateInput = {
@@ -9754,6 +11505,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     tags?: InterviewUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    interviewSessions?: InterviewSessionUncheckedUpdateManyWithoutInterviewNestedInput
   }
 
   export type InterviewCreateManyInput = {
@@ -9798,6 +11550,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionCreateNestedManyWithoutUserInput
@@ -9809,6 +11563,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionUncheckedCreateNestedManyWithoutUserInput
@@ -9820,6 +11576,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUpdateManyWithoutUserNestedInput
@@ -9831,6 +11589,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -9842,6 +11602,7 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -9850,6 +11611,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -9858,6 +11620,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountCreateInput = {
@@ -9964,6 +11727,54 @@ export namespace Prisma {
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type SkillCreateInput = {
+    id?: string
+    name: string
+    level: string
+    user: UserCreateNestedOneWithoutSkillsInput
+  }
+
+  export type SkillUncheckedCreateInput = {
+    id?: string
+    name: string
+    level: string
+    userId: string
+  }
+
+  export type SkillUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutSkillsNestedInput
+  }
+
+  export type SkillUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SkillCreateManyInput = {
+    id?: string
+    name: string
+    level: string
+    userId: string
+  }
+
+  export type SkillUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SkillUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type SessionCreateInput = {
     id?: string
     sessionToken: string
@@ -10056,6 +11867,11 @@ export namespace Prisma {
 
   export type InterviewSessionCreateInput = {
     id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -10063,12 +11879,19 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutInterviewSessionsInput
+    interview?: InterviewCreateNestedOneWithoutInterviewSessionsInput
     messages?: MessageCreateNestedManyWithoutSessionInput
   }
 
   export type InterviewSessionUncheckedCreateInput = {
     id?: string
     userId: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    interviewId?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -10080,6 +11903,11 @@ export namespace Prisma {
 
   export type InterviewSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -10087,12 +11915,19 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutInterviewSessionsNestedInput
+    interview?: InterviewUpdateOneWithoutInterviewSessionsNestedInput
     messages?: MessageUpdateManyWithoutSessionNestedInput
   }
 
   export type InterviewSessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -10105,6 +11940,12 @@ export namespace Prisma {
   export type InterviewSessionCreateManyInput = {
     id?: string
     userId: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    interviewId?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -10115,6 +11956,11 @@ export namespace Prisma {
 
   export type InterviewSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -10126,6 +11972,12 @@ export namespace Prisma {
   export type InterviewSessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -10138,6 +11990,13 @@ export namespace Prisma {
     id?: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
     session: InterviewSessionCreateNestedOneWithoutMessagesInput
   }
@@ -10147,6 +12006,13 @@ export namespace Prisma {
     sessionId: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
   }
 
@@ -10154,6 +12020,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: InterviewSessionUpdateOneRequiredWithoutMessagesNestedInput
   }
@@ -10163,6 +12036,13 @@ export namespace Prisma {
     sessionId?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10171,6 +12051,13 @@ export namespace Prisma {
     sessionId: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
   }
 
@@ -10178,6 +12065,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10186,6 +12080,13 @@ export namespace Prisma {
     sessionId?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10221,6 +12122,16 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type InterviewSessionListRelationFilter = {
+    every?: InterviewSessionWhereInput
+    some?: InterviewSessionWhereInput
+    none?: InterviewSessionWhereInput
+  }
+
+  export type InterviewSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type InterviewCountOrderByAggregateInput = {
@@ -10289,60 +12200,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type AccountListRelationFilter = {
-    every?: AccountWhereInput
-    some?: AccountWhereInput
-    none?: AccountWhereInput
-  }
-
-  export type SessionListRelationFilter = {
-    every?: SessionWhereInput
-    some?: SessionWhereInput
-    none?: SessionWhereInput
-  }
-
-  export type InterviewSessionListRelationFilter = {
-    every?: InterviewSessionWhereInput
-    some?: InterviewSessionWhereInput
-    none?: InterviewSessionWhereInput
-  }
-
-  export type AccountOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type SessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type InterviewSessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UserCountOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-  }
-
-  export type UserMaxOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-  }
-
-  export type UserMinOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-  }
-
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -10356,6 +12213,86 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type SkillListRelationFilter = {
+    every?: SkillWhereInput
+    some?: SkillWhereInput
+    none?: SkillWhereInput
+  }
+
+  export type AccountListRelationFilter = {
+    every?: AccountWhereInput
+    some?: AccountWhereInput
+    none?: AccountWhereInput
+  }
+
+  export type SessionListRelationFilter = {
+    every?: SessionWhereInput
+    some?: SessionWhereInput
+    none?: SessionWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type SkillOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AccountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserCountOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    resumeUrl?: SortOrder
+  }
+
+  export type UserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    resumeUrl?: SortOrder
+  }
+
+  export type UserMinOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    resumeUrl?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -10372,11 +12309,6 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -10437,24 +12369,6 @@ export namespace Prisma {
     expires_at?: SortOrder
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -10469,6 +12383,27 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type SkillCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type SkillMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type SkillMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    level?: SortOrder
+    userId?: SortOrder
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -10514,6 +12449,20 @@ export namespace Prisma {
     token?: SortOrder
     expires?: SortOrder
   }
+
+  export type EnumInterviewKindNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InterviewKind | EnumInterviewKindFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInterviewKindNullableFilter<$PrismaModel> | $Enums.InterviewKind | null
+  }
+
+  export type EnumDifficultyNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Difficulty | EnumDifficultyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDifficultyNullableFilter<$PrismaModel> | $Enums.Difficulty | null
+  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -10538,6 +12487,11 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type InterviewNullableScalarRelationFilter = {
+    is?: InterviewWhereInput | null
+    isNot?: InterviewWhereInput | null
+  }
+
   export type MessageListRelationFilter = {
     every?: MessageWhereInput
     some?: MessageWhereInput
@@ -10551,6 +12505,12 @@ export namespace Prisma {
   export type InterviewSessionCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    company?: SortOrder
+    jobRole?: SortOrder
+    interviewKind?: SortOrder
+    difficulty?: SortOrder
+    language?: SortOrder
+    interviewId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     settings?: SortOrder
@@ -10562,6 +12522,12 @@ export namespace Prisma {
   export type InterviewSessionMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    company?: SortOrder
+    jobRole?: SortOrder
+    interviewKind?: SortOrder
+    difficulty?: SortOrder
+    language?: SortOrder
+    interviewId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     status?: SortOrder
@@ -10572,11 +12538,37 @@ export namespace Prisma {
   export type InterviewSessionMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    company?: SortOrder
+    jobRole?: SortOrder
+    interviewKind?: SortOrder
+    difficulty?: SortOrder
+    language?: SortOrder
+    interviewId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumInterviewKindNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InterviewKind | EnumInterviewKindFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInterviewKindNullableWithAggregatesFilter<$PrismaModel> | $Enums.InterviewKind | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInterviewKindNullableFilter<$PrismaModel>
+    _max?: NestedEnumInterviewKindNullableFilter<$PrismaModel>
+  }
+
+  export type EnumDifficultyNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Difficulty | EnumDifficultyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDifficultyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Difficulty | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDifficultyNullableFilter<$PrismaModel>
+    _max?: NestedEnumDifficultyNullableFilter<$PrismaModel>
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -10615,7 +12607,18 @@ export namespace Prisma {
     sessionId?: SortOrder
     role?: SortOrder
     content?: SortOrder
+    topic?: SortOrder
+    question?: SortOrder
+    briefFeedback?: SortOrder
+    turn?: SortOrder
+    type?: SortOrder
+    mediaUrl?: SortOrder
+    transcript?: SortOrder
     timestamp?: SortOrder
+  }
+
+  export type MessageAvgOrderByAggregateInput = {
+    turn?: SortOrder
   }
 
   export type MessageMaxOrderByAggregateInput = {
@@ -10623,6 +12626,13 @@ export namespace Prisma {
     sessionId?: SortOrder
     role?: SortOrder
     content?: SortOrder
+    topic?: SortOrder
+    question?: SortOrder
+    briefFeedback?: SortOrder
+    turn?: SortOrder
+    type?: SortOrder
+    mediaUrl?: SortOrder
+    transcript?: SortOrder
     timestamp?: SortOrder
   }
 
@@ -10631,11 +12641,36 @@ export namespace Prisma {
     sessionId?: SortOrder
     role?: SortOrder
     content?: SortOrder
+    topic?: SortOrder
+    question?: SortOrder
+    briefFeedback?: SortOrder
+    turn?: SortOrder
+    type?: SortOrder
+    mediaUrl?: SortOrder
+    transcript?: SortOrder
     timestamp?: SortOrder
+  }
+
+  export type MessageSumOrderByAggregateInput = {
+    turn?: SortOrder
   }
 
   export type InterviewCreatetagsInput = {
     set: string[]
+  }
+
+  export type InterviewSessionCreateNestedManyWithoutInterviewInput = {
+    create?: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput> | InterviewSessionCreateWithoutInterviewInput[] | InterviewSessionUncheckedCreateWithoutInterviewInput[]
+    connectOrCreate?: InterviewSessionCreateOrConnectWithoutInterviewInput | InterviewSessionCreateOrConnectWithoutInterviewInput[]
+    createMany?: InterviewSessionCreateManyInterviewInputEnvelope
+    connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+  }
+
+  export type InterviewSessionUncheckedCreateNestedManyWithoutInterviewInput = {
+    create?: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput> | InterviewSessionCreateWithoutInterviewInput[] | InterviewSessionUncheckedCreateWithoutInterviewInput[]
+    connectOrCreate?: InterviewSessionCreateOrConnectWithoutInterviewInput | InterviewSessionCreateOrConnectWithoutInterviewInput[]
+    createMany?: InterviewSessionCreateManyInterviewInputEnvelope
+    connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10649,6 +12684,41 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type InterviewSessionUpdateManyWithoutInterviewNestedInput = {
+    create?: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput> | InterviewSessionCreateWithoutInterviewInput[] | InterviewSessionUncheckedCreateWithoutInterviewInput[]
+    connectOrCreate?: InterviewSessionCreateOrConnectWithoutInterviewInput | InterviewSessionCreateOrConnectWithoutInterviewInput[]
+    upsert?: InterviewSessionUpsertWithWhereUniqueWithoutInterviewInput | InterviewSessionUpsertWithWhereUniqueWithoutInterviewInput[]
+    createMany?: InterviewSessionCreateManyInterviewInputEnvelope
+    set?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    disconnect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    delete?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    update?: InterviewSessionUpdateWithWhereUniqueWithoutInterviewInput | InterviewSessionUpdateWithWhereUniqueWithoutInterviewInput[]
+    updateMany?: InterviewSessionUpdateManyWithWhereWithoutInterviewInput | InterviewSessionUpdateManyWithWhereWithoutInterviewInput[]
+    deleteMany?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
+  }
+
+  export type InterviewSessionUncheckedUpdateManyWithoutInterviewNestedInput = {
+    create?: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput> | InterviewSessionCreateWithoutInterviewInput[] | InterviewSessionUncheckedCreateWithoutInterviewInput[]
+    connectOrCreate?: InterviewSessionCreateOrConnectWithoutInterviewInput | InterviewSessionCreateOrConnectWithoutInterviewInput[]
+    upsert?: InterviewSessionUpsertWithWhereUniqueWithoutInterviewInput | InterviewSessionUpsertWithWhereUniqueWithoutInterviewInput[]
+    createMany?: InterviewSessionCreateManyInterviewInputEnvelope
+    set?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    disconnect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    delete?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+    update?: InterviewSessionUpdateWithWhereUniqueWithoutInterviewInput | InterviewSessionUpdateWithWhereUniqueWithoutInterviewInput[]
+    updateMany?: InterviewSessionUpdateManyWithWhereWithoutInterviewInput | InterviewSessionUpdateManyWithWhereWithoutInterviewInput[]
+    deleteMany?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
+  }
+
+  export type SkillCreateNestedManyWithoutUserInput = {
+    create?: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput> | SkillCreateWithoutUserInput[] | SkillUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillCreateOrConnectWithoutUserInput | SkillCreateOrConnectWithoutUserInput[]
+    createMany?: SkillCreateManyUserInputEnvelope
+    connect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
   }
 
   export type AccountCreateNestedManyWithoutUserInput = {
@@ -10672,6 +12742,13 @@ export namespace Prisma {
     connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
   }
 
+  export type SkillUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput> | SkillCreateWithoutUserInput[] | SkillUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillCreateOrConnectWithoutUserInput | SkillCreateOrConnectWithoutUserInput[]
+    createMany?: SkillCreateManyUserInputEnvelope
+    connect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -10691,6 +12768,24 @@ export namespace Prisma {
     connectOrCreate?: InterviewSessionCreateOrConnectWithoutUserInput | InterviewSessionCreateOrConnectWithoutUserInput[]
     createMany?: InterviewSessionCreateManyUserInputEnvelope
     connect?: InterviewSessionWhereUniqueInput | InterviewSessionWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type SkillUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput> | SkillCreateWithoutUserInput[] | SkillUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillCreateOrConnectWithoutUserInput | SkillCreateOrConnectWithoutUserInput[]
+    upsert?: SkillUpsertWithWhereUniqueWithoutUserInput | SkillUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SkillCreateManyUserInputEnvelope
+    set?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    disconnect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    delete?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    connect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    update?: SkillUpdateWithWhereUniqueWithoutUserInput | SkillUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SkillUpdateManyWithWhereWithoutUserInput | SkillUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SkillScalarWhereInput | SkillScalarWhereInput[]
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -10733,6 +12828,20 @@ export namespace Prisma {
     update?: InterviewSessionUpdateWithWhereUniqueWithoutUserInput | InterviewSessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: InterviewSessionUpdateManyWithWhereWithoutUserInput | InterviewSessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
+  }
+
+  export type SkillUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput> | SkillCreateWithoutUserInput[] | SkillUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillCreateOrConnectWithoutUserInput | SkillCreateOrConnectWithoutUserInput[]
+    upsert?: SkillUpsertWithWhereUniqueWithoutUserInput | SkillUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SkillCreateManyUserInputEnvelope
+    set?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    disconnect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    delete?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    connect?: SkillWhereUniqueInput | SkillWhereUniqueInput[]
+    update?: SkillUpdateWithWhereUniqueWithoutUserInput | SkillUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SkillUpdateManyWithWhereWithoutUserInput | SkillUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SkillScalarWhereInput | SkillScalarWhereInput[]
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -10783,10 +12892,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -10801,6 +12906,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAccountsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
+  }
+
+  export type UserCreateNestedOneWithoutSkillsInput = {
+    create?: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSkillsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSkillsNestedInput = {
+    create?: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSkillsInput
+    upsert?: UserUpsertWithoutSkillsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSkillsInput, UserUpdateWithoutSkillsInput>, UserUncheckedUpdateWithoutSkillsInput>
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -10823,6 +12942,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type InterviewCreateNestedOneWithoutInterviewSessionsInput = {
+    create?: XOR<InterviewCreateWithoutInterviewSessionsInput, InterviewUncheckedCreateWithoutInterviewSessionsInput>
+    connectOrCreate?: InterviewCreateOrConnectWithoutInterviewSessionsInput
+    connect?: InterviewWhereUniqueInput
+  }
+
   export type MessageCreateNestedManyWithoutSessionInput = {
     create?: XOR<MessageCreateWithoutSessionInput, MessageUncheckedCreateWithoutSessionInput> | MessageCreateWithoutSessionInput[] | MessageUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutSessionInput | MessageCreateOrConnectWithoutSessionInput[]
@@ -10837,12 +12962,30 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type NullableEnumInterviewKindFieldUpdateOperationsInput = {
+    set?: $Enums.InterviewKind | null
+  }
+
+  export type NullableEnumDifficultyFieldUpdateOperationsInput = {
+    set?: $Enums.Difficulty | null
+  }
+
   export type UserUpdateOneRequiredWithoutInterviewSessionsNestedInput = {
     create?: XOR<UserCreateWithoutInterviewSessionsInput, UserUncheckedCreateWithoutInterviewSessionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutInterviewSessionsInput
     upsert?: UserUpsertWithoutInterviewSessionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInterviewSessionsInput, UserUpdateWithoutInterviewSessionsInput>, UserUncheckedUpdateWithoutInterviewSessionsInput>
+  }
+
+  export type InterviewUpdateOneWithoutInterviewSessionsNestedInput = {
+    create?: XOR<InterviewCreateWithoutInterviewSessionsInput, InterviewUncheckedCreateWithoutInterviewSessionsInput>
+    connectOrCreate?: InterviewCreateOrConnectWithoutInterviewSessionsInput
+    upsert?: InterviewUpsertWithoutInterviewSessionsInput
+    disconnect?: InterviewWhereInput | boolean
+    delete?: InterviewWhereInput | boolean
+    connect?: InterviewWhereUniqueInput
+    update?: XOR<XOR<InterviewUpdateToOneWithWhereWithoutInterviewSessionsInput, InterviewUpdateWithoutInterviewSessionsInput>, InterviewUncheckedUpdateWithoutInterviewSessionsInput>
   }
 
   export type MessageUpdateManyWithoutSessionNestedInput = {
@@ -10968,17 +13111,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -10994,6 +13126,17 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11022,6 +13165,40 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
+
+  export type NestedEnumInterviewKindNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InterviewKind | EnumInterviewKindFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInterviewKindNullableFilter<$PrismaModel> | $Enums.InterviewKind | null
+  }
+
+  export type NestedEnumDifficultyNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Difficulty | EnumDifficultyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDifficultyNullableFilter<$PrismaModel> | $Enums.Difficulty | null
+  }
+
+  export type NestedEnumInterviewKindNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InterviewKind | EnumInterviewKindFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InterviewKind[] | ListEnumInterviewKindFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInterviewKindNullableWithAggregatesFilter<$PrismaModel> | $Enums.InterviewKind | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInterviewKindNullableFilter<$PrismaModel>
+    _max?: NestedEnumInterviewKindNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDifficultyNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Difficulty | EnumDifficultyFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Difficulty[] | ListEnumDifficultyFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDifficultyNullableWithAggregatesFilter<$PrismaModel> | $Enums.Difficulty | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDifficultyNullableFilter<$PrismaModel>
+    _max?: NestedEnumDifficultyNullableFilter<$PrismaModel>
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -11044,6 +13221,108 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type InterviewSessionCreateWithoutInterviewInput = {
+    id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    title: string
+    description: string
+    settings: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutInterviewSessionsInput
+    messages?: MessageCreateNestedManyWithoutSessionInput
+  }
+
+  export type InterviewSessionUncheckedCreateWithoutInterviewInput = {
+    id?: string
+    userId: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    title: string
+    description: string
+    settings: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type InterviewSessionCreateOrConnectWithoutInterviewInput = {
+    where: InterviewSessionWhereUniqueInput
+    create: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput>
+  }
+
+  export type InterviewSessionCreateManyInterviewInputEnvelope = {
+    data: InterviewSessionCreateManyInterviewInput | InterviewSessionCreateManyInterviewInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InterviewSessionUpsertWithWhereUniqueWithoutInterviewInput = {
+    where: InterviewSessionWhereUniqueInput
+    update: XOR<InterviewSessionUpdateWithoutInterviewInput, InterviewSessionUncheckedUpdateWithoutInterviewInput>
+    create: XOR<InterviewSessionCreateWithoutInterviewInput, InterviewSessionUncheckedCreateWithoutInterviewInput>
+  }
+
+  export type InterviewSessionUpdateWithWhereUniqueWithoutInterviewInput = {
+    where: InterviewSessionWhereUniqueInput
+    data: XOR<InterviewSessionUpdateWithoutInterviewInput, InterviewSessionUncheckedUpdateWithoutInterviewInput>
+  }
+
+  export type InterviewSessionUpdateManyWithWhereWithoutInterviewInput = {
+    where: InterviewSessionScalarWhereInput
+    data: XOR<InterviewSessionUpdateManyMutationInput, InterviewSessionUncheckedUpdateManyWithoutInterviewInput>
+  }
+
+  export type InterviewSessionScalarWhereInput = {
+    AND?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
+    OR?: InterviewSessionScalarWhereInput[]
+    NOT?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
+    id?: StringFilter<"InterviewSession"> | string
+    userId?: StringFilter<"InterviewSession"> | string
+    company?: StringNullableFilter<"InterviewSession"> | string | null
+    jobRole?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewKind?: EnumInterviewKindNullableFilter<"InterviewSession"> | $Enums.InterviewKind | null
+    difficulty?: EnumDifficultyNullableFilter<"InterviewSession"> | $Enums.Difficulty | null
+    language?: StringNullableFilter<"InterviewSession"> | string | null
+    interviewId?: StringNullableFilter<"InterviewSession"> | string | null
+    title?: StringFilter<"InterviewSession"> | string
+    description?: StringFilter<"InterviewSession"> | string
+    settings?: JsonFilter<"InterviewSession">
+    status?: StringFilter<"InterviewSession"> | string
+    createdAt?: DateTimeFilter<"InterviewSession"> | Date | string
+    updatedAt?: DateTimeFilter<"InterviewSession"> | Date | string
+  }
+
+  export type SkillCreateWithoutUserInput = {
+    id?: string
+    name: string
+    level: string
+  }
+
+  export type SkillUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    level: string
+  }
+
+  export type SkillCreateOrConnectWithoutUserInput = {
+    where: SkillWhereUniqueInput
+    create: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput>
+  }
+
+  export type SkillCreateManyUserInputEnvelope = {
+    data: SkillCreateManyUserInput | SkillCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -11108,17 +13387,29 @@ export namespace Prisma {
 
   export type InterviewSessionCreateWithoutUserInput = {
     id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    interview?: InterviewCreateNestedOneWithoutInterviewSessionsInput
     messages?: MessageCreateNestedManyWithoutSessionInput
   }
 
   export type InterviewSessionUncheckedCreateWithoutUserInput = {
     id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    interviewId?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -11136,6 +13427,32 @@ export namespace Prisma {
   export type InterviewSessionCreateManyUserInputEnvelope = {
     data: InterviewSessionCreateManyUserInput | InterviewSessionCreateManyUserInput[]
     skipDuplicates?: boolean
+  }
+
+  export type SkillUpsertWithWhereUniqueWithoutUserInput = {
+    where: SkillWhereUniqueInput
+    update: XOR<SkillUpdateWithoutUserInput, SkillUncheckedUpdateWithoutUserInput>
+    create: XOR<SkillCreateWithoutUserInput, SkillUncheckedCreateWithoutUserInput>
+  }
+
+  export type SkillUpdateWithWhereUniqueWithoutUserInput = {
+    where: SkillWhereUniqueInput
+    data: XOR<SkillUpdateWithoutUserInput, SkillUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SkillUpdateManyWithWhereWithoutUserInput = {
+    where: SkillScalarWhereInput
+    data: XOR<SkillUpdateManyMutationInput, SkillUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SkillScalarWhereInput = {
+    AND?: SkillScalarWhereInput | SkillScalarWhereInput[]
+    OR?: SkillScalarWhereInput[]
+    NOT?: SkillScalarWhereInput | SkillScalarWhereInput[]
+    id?: StringFilter<"Skill"> | string
+    name?: StringFilter<"Skill"> | string
+    level?: StringFilter<"Skill"> | string
+    userId?: StringFilter<"Skill"> | string
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -11214,26 +13531,14 @@ export namespace Prisma {
     data: XOR<InterviewSessionUpdateManyMutationInput, InterviewSessionUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type InterviewSessionScalarWhereInput = {
-    AND?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
-    OR?: InterviewSessionScalarWhereInput[]
-    NOT?: InterviewSessionScalarWhereInput | InterviewSessionScalarWhereInput[]
-    id?: StringFilter<"InterviewSession"> | string
-    userId?: StringFilter<"InterviewSession"> | string
-    title?: StringFilter<"InterviewSession"> | string
-    description?: StringFilter<"InterviewSession"> | string
-    settings?: JsonFilter<"InterviewSession">
-    status?: StringFilter<"InterviewSession"> | string
-    createdAt?: DateTimeFilter<"InterviewSession"> | Date | string
-    updatedAt?: DateTimeFilter<"InterviewSession"> | Date | string
-  }
-
   export type UserCreateWithoutAccountsInput = {
     id?: string
     username: string
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionCreateNestedManyWithoutUserInput
   }
@@ -11244,6 +13549,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11270,6 +13577,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUpdateManyWithoutUserNestedInput
   }
@@ -11280,6 +13589,72 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    interviewSessions?: InterviewSessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutSkillsInput = {
+    id?: string
+    username: string
+    fullName: string
+    email: string
+    password: string
+    resumeUrl?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    interviewSessions?: InterviewSessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSkillsInput = {
+    id?: string
+    username: string
+    fullName: string
+    email: string
+    password: string
+    resumeUrl?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    interviewSessions?: InterviewSessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSkillsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
+  }
+
+  export type UserUpsertWithoutSkillsInput = {
+    update: XOR<UserUpdateWithoutSkillsInput, UserUncheckedUpdateWithoutSkillsInput>
+    create: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSkillsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSkillsInput, UserUncheckedUpdateWithoutSkillsInput>
+  }
+
+  export type UserUpdateWithoutSkillsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    interviewSessions?: InterviewSessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSkillsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11290,6 +13665,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionCreateNestedManyWithoutUserInput
   }
@@ -11300,6 +13677,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     interviewSessions?: InterviewSessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11326,6 +13705,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUpdateManyWithoutUserNestedInput
   }
@@ -11336,6 +13717,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     interviewSessions?: InterviewSessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11346,6 +13729,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -11356,6 +13741,8 @@ export namespace Prisma {
     fullName: string
     email: string
     password: string
+    resumeUrl?: string | null
+    skills?: SkillUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11365,10 +13752,46 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutInterviewSessionsInput, UserUncheckedCreateWithoutInterviewSessionsInput>
   }
 
+  export type InterviewCreateWithoutInterviewSessionsInput = {
+    id?: string
+    title: string
+    role: string
+    type: string
+    difficulty: string
+    timeEstimate: string
+    description: string
+    tags?: InterviewCreatetagsInput | string[]
+    createdAt?: Date | string
+  }
+
+  export type InterviewUncheckedCreateWithoutInterviewSessionsInput = {
+    id?: string
+    title: string
+    role: string
+    type: string
+    difficulty: string
+    timeEstimate: string
+    description: string
+    tags?: InterviewCreatetagsInput | string[]
+    createdAt?: Date | string
+  }
+
+  export type InterviewCreateOrConnectWithoutInterviewSessionsInput = {
+    where: InterviewWhereUniqueInput
+    create: XOR<InterviewCreateWithoutInterviewSessionsInput, InterviewUncheckedCreateWithoutInterviewSessionsInput>
+  }
+
   export type MessageCreateWithoutSessionInput = {
     id?: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
   }
 
@@ -11376,6 +13799,13 @@ export namespace Prisma {
     id?: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
   }
 
@@ -11406,6 +13836,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -11416,8 +13848,45 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    resumeUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: SkillUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type InterviewUpsertWithoutInterviewSessionsInput = {
+    update: XOR<InterviewUpdateWithoutInterviewSessionsInput, InterviewUncheckedUpdateWithoutInterviewSessionsInput>
+    create: XOR<InterviewCreateWithoutInterviewSessionsInput, InterviewUncheckedCreateWithoutInterviewSessionsInput>
+    where?: InterviewWhereInput
+  }
+
+  export type InterviewUpdateToOneWithWhereWithoutInterviewSessionsInput = {
+    where?: InterviewWhereInput
+    data: XOR<InterviewUpdateWithoutInterviewSessionsInput, InterviewUncheckedUpdateWithoutInterviewSessionsInput>
+  }
+
+  export type InterviewUpdateWithoutInterviewSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    difficulty?: StringFieldUpdateOperationsInput | string
+    timeEstimate?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    tags?: InterviewUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InterviewUncheckedUpdateWithoutInterviewSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    difficulty?: StringFieldUpdateOperationsInput | string
+    timeEstimate?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    tags?: InterviewUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUpsertWithWhereUniqueWithoutSessionInput = {
@@ -11444,11 +13913,23 @@ export namespace Prisma {
     sessionId?: StringFilter<"Message"> | string
     role?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
+    topic?: StringNullableFilter<"Message"> | string | null
+    question?: StringNullableFilter<"Message"> | string | null
+    briefFeedback?: StringNullableFilter<"Message"> | string | null
+    turn?: IntNullableFilter<"Message"> | number | null
+    type?: StringFilter<"Message"> | string
+    mediaUrl?: StringNullableFilter<"Message"> | string | null
+    transcript?: StringNullableFilter<"Message"> | string | null
     timestamp?: DateTimeFilter<"Message"> | Date | string
   }
 
   export type InterviewSessionCreateWithoutMessagesInput = {
     id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -11456,11 +13937,18 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutInterviewSessionsInput
+    interview?: InterviewCreateNestedOneWithoutInterviewSessionsInput
   }
 
   export type InterviewSessionUncheckedCreateWithoutMessagesInput = {
     id?: string
     userId: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    interviewId?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
@@ -11487,6 +13975,11 @@ export namespace Prisma {
 
   export type InterviewSessionUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -11494,17 +13987,96 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutInterviewSessionsNestedInput
+    interview?: InterviewUpdateOneWithoutInterviewSessionsNestedInput
   }
 
   export type InterviewSessionUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InterviewSessionCreateManyInterviewInput = {
+    id?: string
+    userId: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    title: string
+    description: string
+    settings: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InterviewSessionUpdateWithoutInterviewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutInterviewSessionsNestedInput
+    messages?: MessageUpdateManyWithoutSessionNestedInput
+  }
+
+  export type InterviewSessionUncheckedUpdateWithoutInterviewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type InterviewSessionUncheckedUpdateManyWithoutInterviewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    settings?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SkillCreateManyUserInput = {
+    id?: string
+    name: string
+    level: string
   }
 
   export type AccountCreateManyUserInput = {
@@ -11529,12 +14101,36 @@ export namespace Prisma {
 
   export type InterviewSessionCreateManyUserInput = {
     id?: string
+    company?: string | null
+    jobRole?: string | null
+    interviewKind?: $Enums.InterviewKind | null
+    difficulty?: $Enums.Difficulty | null
+    language?: string | null
+    interviewId?: string | null
     title: string
     description: string
     settings: JsonNullValueInput | InputJsonValue
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SkillUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SkillUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SkillUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -11599,17 +14195,29 @@ export namespace Prisma {
 
   export type InterviewSessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    interview?: InterviewUpdateOneWithoutInterviewSessionsNestedInput
     messages?: MessageUpdateManyWithoutSessionNestedInput
   }
 
   export type InterviewSessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -11621,6 +14229,12 @@ export namespace Prisma {
 
   export type InterviewSessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    jobRole?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewKind?: NullableEnumInterviewKindFieldUpdateOperationsInput | $Enums.InterviewKind | null
+    difficulty?: NullableEnumDifficultyFieldUpdateOperationsInput | $Enums.Difficulty | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    interviewId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     settings?: JsonNullValueInput | InputJsonValue
@@ -11633,6 +14247,13 @@ export namespace Prisma {
     id?: string
     role: string
     content: string
+    topic?: string | null
+    question?: string | null
+    briefFeedback?: string | null
+    turn?: number | null
+    type?: string
+    mediaUrl?: string | null
+    transcript?: string | null
     timestamp?: Date | string
   }
 
@@ -11640,6 +14261,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -11647,6 +14275,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -11654,6 +14289,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    briefFeedback?: NullableStringFieldUpdateOperationsInput | string | null
+    turn?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

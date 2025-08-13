@@ -29,6 +29,10 @@ export default function Navbar({variant="dark"}: {variant?: "light" | "dark"}) {
                 <Link href="/ava" className="hover:font-bold hover:bg-white/10 px-3 py-1 rounded-md transition-all duration-200">
                     Ava AI
                 </Link>
+
+                <Link href="/signup" className="hover:font-bold hover:bg-white/10 px-3 py-1 rounded-md transition-all duration-200">
+                    Sign Up
+                </Link>
             </div>
         </nav>
     )

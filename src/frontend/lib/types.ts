@@ -7,5 +7,6 @@ export type InterviewSettings = {
     language: 'english' | 'spanish' | 'french';
     cameraEnabled: boolean;
     jobRole?: string;
+    company?: string;
   };
   

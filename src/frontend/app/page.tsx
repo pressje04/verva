@@ -3,8 +3,9 @@ import Image from "next/image";
 
 export default function Home() {
   return (
+    <>
+    <Navbar variant="dark"/>
     <div className="landing-background h-screen w-full flex flex-col">
-      <Navbar />
       <div className="flex-1 flex flex-col px-16 text-center justify-center items-center">
         <h1 className="font-medium text-center text-6xl mb-6 mx-auto max-w-l">
           Change the way you prepare for interviews forever 
@@ -35,5 +36,6 @@ export default function Home() {
 
         </section>
     </div>
+    </>
   );
 }

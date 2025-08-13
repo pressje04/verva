@@ -1,12 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../src/frontend/generated/prisma"
 }
 
 datasource db {
@@ -14,30 +10,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Interview {
-  id  String  @id @default(uuid()) //id for our db
-  title   String //What's the interview called? Company perhaps
-  role String //What position is it for? IOS dev? SWE intern?
-  type String //Behavioral? Technical? Maybe more specific like system design or architecture
-  difficulty  String //Easy, hard, maybe type of interview experience so your 
-                      //ready for both
-  timeEstimate String //15 min, 1 hr, not strictly enforced but recommended
-  description String
-  tags String[] //identifiers used to filter relevant interviews
-  createdAt DateTime @default(now())
+/* ---------------- Enums ---------------- */
+
+enum MsgRole {
+  user
+  ai
 }
 
-// NEXT AUTH USER AUTHENTICATION MODELS   
+enum InterviewKind {
+  behavioral
+  technical
+  leadership
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+/* ---------------- Existing Models ---------------- */
+
+model Interview {
+  id           String   @id @default(uuid())
+  title        String
+  role         String         // position title (e.g., "SWE Intern")
+  type         String         // template type label if you use templates
+  difficulty   String
+  timeEstimate String
+  description  String
+  tags         String[]
+  createdAt    DateTime @default(now())
+
+  // (optional) sessions created from this template
+  interviewSessions InterviewSession[]
+}
+
+/* -------------- NextAuth Models -------------- */
+
 model User {
   id       String  @id @default(cuid())
   username String  @unique
   fullName String
   email    String  @unique
   password String
+  resumeUrl String?
+  skills   Skill[]
 
-  // NextAuth
-  accounts Account[]
-  sessions Session[]
+  accounts          Account[]
+  sessions          Session[]
   interviewSessions InterviewSession[]
 }
 
@@ -59,6 +80,14 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Skill {
+  id     String @id @default(cuid())
+  name   String
+  level  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -75,34 +104,58 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
-// INTERVIEW MODELS
+/* -------------- Interview Flow -------------- */
 
 model InterviewSession {
   id            String   @id @default(cuid())
   user          User     @relation(fields: [userId], references: [id])
   userId        String
 
-  title         String     // e.g. “Software Engineer at Netflix”
-  description   String     // Job description or custom instructions
+  // Explicit, queryable session metadata (for modal/config + filtering)
+  company       String?                // e.g., "Amazon"
+  jobRole       String?                // e.g., "SWE Intern"
+  interviewKind InterviewKind?         // behavioral | technical | leadership
+  difficulty    Difficulty?            // normalized difficulty
+  language      String?                // e.g., "English" or "en"
 
-  settings      Json       // JSON blob of selected AI config (difficulty, tone, etc.)
+  // Optional linkage to an Interview template
+  interviewId   String?
+  interview     Interview? @relation(fields: [interviewId], references: [id])
 
-  messages      Message[]  // All Q&A exchanges
+  title         String                 // e.g., “Software Engineer at Netflix”
+  description   String                 // JD or custom instructions
+
+  settings      Json                   // full config blob, keep for long-tail knobs
+  messages      Message[]
   status        String     @default("active") // active | complete | abandoned
 
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([company])
+  @@index([interviewKind])
 }
 
 model Message {
-  id              String   @id @default(cuid())
-  session         InterviewSession @relation(fields: [sessionId], references: [id])
-  sessionId       String
+  id           String   @id @default(cuid())
+  session      InterviewSession @relation(fields: [sessionId], references: [id])
+  sessionId    String
 
-  role            String   // "user" | "ai"
-  content         String
-  timestamp       DateTime @default(now())
+  role         String         // enum (safer than free text) ***CHANGE BACK TO ENUM IN PROD!!!
+  content      String            // full rendered bubble text (kept for backward compat)
+
+  // Structured fields for AI turns (great for topic control + UI)
+  topic         String?          // e.g., "DSA", "Teamwork", "Customer Obsession"
+  question      String?          // the actual question asked
+  briefFeedback String?          // short feedback about the last user answer
+  turn          Int?             // optional: 1,2,3... for sequencing
+
+  type         String   @default("text") // "text" | "audio" | "video"
+  mediaUrl     String?
+  transcript   String?
+
+  timestamp    DateTime @default(now())
+
+  @@index([sessionId, timestamp])
 }
-
-

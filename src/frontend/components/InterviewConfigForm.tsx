@@ -99,7 +99,18 @@ export default function InterviewConfigForm(
               <option value="french">French</option>
             </select>
           </label>
-    
+
+          <label className="block">
+            <span className="text-sm font-medium">Company (optional)</span>
+            <input
+              type="text"
+              value={formData.company || ''}
+              onChange={(e) => handleChange('company', e.target.value)}
+              placeholder="e.g. Amazon"
+              className="w-full text-black mt-1 p-2 rounded bg-white/5 border border-white/20"
+            />
+          </label>
+              
           {/* Job Role */}
           <label className="block">
             <span className="text-sm font-medium">Job Role (optional)</span>

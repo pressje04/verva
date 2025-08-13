@@ -1,9 +1,15 @@
 {
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/interviews/[sessionId]/message/messages/route": "app/api/interviews/[sessionId]/message/messages/route.js",
+  "/api/interviews/ask/route": "app/api/interviews/ask/route.js",
   "/api/interviews/create/route": "app/api/interviews/create/route.js",
   "/api/interviews/outlines/[id]/route": "app/api/interviews/outlines/[id]/route.js",
   "/api/interviews/outlines/route": "app/api/interviews/outlines/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/interviews/[sessionId]/page": "app/interviews/[sessionId]/page.js",
   "/interviews/config/[id]/page": "app/interviews/config/[id]/page.js",
   "/interviews/page": "app/interviews/page.js",
-  "/page": "app/page.js"
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/signup/page": "app/signup/page.js"
 }

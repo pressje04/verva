@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, { params }: { params: { sessionId: 
   const ollamaResponse = await fetch('http://localhost:11434/api/chat', {
     method: 'POST',
     body: JSON.stringify({
-      model: 'llama3',
+      model: 'mistral',
       messages: [
         { role: 'system', content: 'You are a helpful behavioral interview coach.' },
         { role: 'user', content: message },
