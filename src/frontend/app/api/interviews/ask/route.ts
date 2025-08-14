@@ -4,6 +4,44 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
+// Minimal topic list (extend as needed)
+const DEFAULT_TOPICS = [
+  'Intro',
+  'Teamwork',
+  'Conflict',
+  'Ownership',
+  'Communication',
+  'Time Management',
+  'Learning from Failure',
+  'DSA',
+  'System Design',
+  'Concurrency',
+  'APIs & Integration',
+  'Testing & Debugging',
+];
+
+// --- NEW: tiny helpers to detect near-duplicates ---------------------------
+function normalize(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function jaccardSimilarity(a: string, b: string) {
+  const A = new Set(normalize(a).split(' ').filter(Boolean));
+  const B = new Set(normalize(b).split(' ').filter(Boolean));
+  const inter = [...A].filter(x => B.has(x)).length;
+  const union = new Set([...A, ...B]).size || 1;
+  return inter / union;
+}
+function isTooSimilar(a: string, b: string, threshold = 0.80) {
+  return jaccardSimilarity(a, b) >= threshold;
+}
+// your bubbles are "brief_feedback\n\nquestion" — grab the question part
+function extractQuestionFromBubble(content: string) {
+  const parts = content.split('\n\n');
+  return parts[parts.length - 1].trim();
+}
+
+// --- (no other changes above here) -----------------------------------------
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -37,14 +75,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 403 });
     }
 
-    // 1) Load history
+    // --- Topic tracking state (persisted in InterviewSession.settings.meta.coveredTopics)
+    const persistedSettings = (interviewSession.settings ?? {}) as any;
+    const coveredTopics: string[] = Array.isArray(persistedSettings?.meta?.coveredTopics)
+      ? [...persistedSettings.meta.coveredTopics]
+      : [];
+    const remainingTopics = DEFAULT_TOPICS.filter(t => !coveredTopics.includes(t));
+
+    // 1) Load history (more context -> better dedup)
     const history = await prisma.message.findMany({
       where: { sessionId },
       orderBy: { timestamp: 'asc' },
-      take: 30,
+      take: 50, // bumped from 30
     });
 
-    // 2) Build messages with a real system prompt
+    // --- NEW: recent assistant questions to avoid repeating -----------------
+    const recentAssistantQs = history
+      .filter(m => m.role === 'ai')
+      .slice(-6)
+      .map(m => extractQuestionFromBubble(m.content));
+    const avoidList = recentAssistantQs.length
+      ? recentAssistantQs.map(q => `- ${q}`).join('\n')
+      : '(none)';
+
+    // 2) Build messages with a real system prompt (now includes AVOID list)
     const sys = {
       role: 'system',
       content: `
@@ -56,15 +110,23 @@ Rules:
 - Keep outputs short.
 - Don't be robotic. Be human and conversational. Maybe start with a greeting like how are you doing before actually starting the interview for authentic experience.
 - You should ask around 4-6 questions, aiming for 5 unless you would like to expand upon something said by the candidate that was unclear
-- Ask the user to confirm if they are ready to begin their ${settings?.interviewKind ?? 'behavioral'} interview with ${settings?.company || 'Capital One'} for the first question and await for them to say yes. Then begin asking the interview questions.
 - Do not ask the same or very similar question more than once.
 - Keep track of topics already discussed and move to a new topic each turn.
 - If a topic has been covered in detail, transition to a different skill area or behavioral theme.
 - Stay in ${settings?.language ?? 'English'} and target a ${settings?.difficulty ?? 'medium'} level.
 ${settings?.jobRole ? `- The role is ${settings.jobRole}.` : ''}
-Output JSON ONLY with this schema:
-{"question": string, "brief_feedback": string} 
-"brief_feedback" may be an empty string for the very first turn.
+
+TOPICS:
+- All: ${DEFAULT_TOPICS.join(', ')}
+- Covered: ${coveredTopics.length ? coveredTopics.join(', ') : '(none)'}
+- Remaining: ${remainingTopics.length ? remainingTopics.join(', ') : '(none)'}
+
+AVOID REPEATING any of the recent questions:
+${avoidList}
+
+Choose ONE topic from Remaining (or if none remain, move to wrap-up) and output JSON ONLY with this schema:
+{"topic": string, "question": string, "brief_feedback": string}
+"topic" must be one of Remaining (or "Wrap-up" if none remain). "brief_feedback" may be empty on the first turn.
 `,
     } as const;
 
@@ -109,20 +171,73 @@ Output JSON ONLY with this schema:
       return NextResponse.json({ error: 'Failed to generate response' }, { status: 500 });
     }
 
-    type Payload = { question: string; brief_feedback?: string };
+    type Payload = { topic?: string; question: string; brief_feedback?: string };
 
     let payload: Payload;
     try {
       const json = await ollamaRes.json();     // non-stream returns one object
-      // For /api/chat non-stream, content is at json.message.content
-      // but with format:"json" many models return JSON directly as the content
       const raw = json?.message?.content ?? '';
       payload = JSON.parse(raw) as Payload;
     } catch (e) {
-      // Fallback: if the model ignored format, try to salvage with a tiny regex
       const txt = await ollamaRes.text().catch(() => '');
       const match = txt.match(/\{[\s\S]*\}/);
-      payload = match ? JSON.parse(match[0]) : { question: 'Let’s begin. Are you ready?', brief_feedback: '' };
+      payload = match ? JSON.parse(match[0]) : { topic: remainingTopics[0] ?? 'Wrap-up', question: 'Let’s begin. Are you ready?', brief_feedback: '' };
+    }
+
+    // --- NEW: minimal server-side guardrail: ensure topic advances & dedup --
+    const chosenTopic = (payload.topic && !coveredTopics.includes(payload.topic))
+      ? payload.topic
+      : (remainingTopics[0] ?? 'Wrap-up');
+
+    // Check similarity vs. recent assistant questions; if too similar, retry once
+    const looksDuplicate = recentAssistantQs.some(q => isTooSimilar(q, payload.question));
+    if (looksDuplicate) {
+      // Retry with a stronger "avoid" instruction
+      const sysRetry = {
+        role: 'system',
+        content: `
+You asked something too similar earlier. Ask a DIFFERENT question about the topic "${chosenTopic}".
+AVOID these questions exactly and anything semantically close:
+${avoidList}
+
+Output JSON ONLY: {"topic":"${chosenTopic}","question":"<new question>","brief_feedback":""}
+`.trim(),
+      };
+      const retryRes = await fetch('http://localhost:11434/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'mistral',
+          messages: [sysRetry, ...prior, ...(userTurn ? [{ role: 'user', content: userTurn }] : [])],
+          stream: false,
+          format: 'json',
+          options: { num_predict: 200, temperature: 0.3, stop: ['\n\nCandidate:', '\n\nUser:'] },
+        }),
+      });
+      if (retryRes.ok) {
+        try {
+          const j = await retryRes.json();
+          const rraw = j?.message?.content ?? '';
+          const rp = JSON.parse(rraw) as Payload;
+          if (rp?.question && !recentAssistantQs.some(q => isTooSimilar(q, rp.question))) {
+            payload = { ...rp, topic: chosenTopic };
+          }
+        } catch { /* ignore and keep original payload */ }
+      }
+    }
+
+    // Mark topic as covered
+    if (chosenTopic !== 'Wrap-up' && !coveredTopics.includes(chosenTopic)) {
+      coveredTopics.push(chosenTopic);
+      await prisma.interviewSession.update({
+        where: { id: sessionId },
+        data: {
+          settings: {
+            ...persistedSettings,
+            meta: { ...(persistedSettings?.meta ?? {}), coveredTopics },
+          },
+        },
+      });
     }
 
     const finalAssistantText =
@@ -139,9 +254,10 @@ Output JSON ONLY with this schema:
     });
 
     return NextResponse.json({
+      topic: chosenTopic,
       question: payload.question,
       brief_feedback: payload.brief_feedback ?? '',
-      response: finalAssistantText, // for your existing UI
+      response: finalAssistantText,
     });
   } catch (err) {
     console.error('Interview AI error:', err);
