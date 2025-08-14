@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { getCompanyProfile } from '@/lib/companyProfiles';
+import { getRoleBlueprint } from '@/lib/roleBlueprints';
+import { templates } from '@/lib/questionTemplates';
 
 // Minimal topic list (extend as needed)
 const DEFAULT_TOPICS = [
@@ -39,6 +42,28 @@ function extractQuestionFromBubble(content: string) {
   const parts = content.split('\n\n');
   return parts[parts.length - 1].trim();
 }
+
+// For topic selection plans - Randomized but not entirely random
+function mulberry32(a: number) {
+  return function () {
+    let t = (a += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffleDeterministic<T>(arr: T[], seedStr: string) {
+  const seed = seedStr.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const rand = mulberry32(seed || 1);
+  const a = [...arr];
+  // Fisher–Yates using seeded rand
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 
 // --- (no other changes above here) -----------------------------------------
 
@@ -98,36 +123,89 @@ export async function POST(req: NextRequest) {
       ? recentAssistantQs.map(q => `- ${q}`).join('\n')
       : '(none)';
 
+      const profile = getCompanyProfile(settings?.company ?? interviewSession.company);
+      const blueprint = getRoleBlueprint(settings?.jobRole ?? interviewSession.jobRole);
+
+      function pick<T>(arr: T[] | undefined, fallback: string): string {
+        if (!arr || !arr.length) return fallback;
+        return String(arr[Math.floor(Math.random() * arr.length)]);
+      }
+
+      const roleName = (settings?.jobRole ?? interviewSession.jobRole ?? '').toLowerCase();
+      const rolePeer = roleName.includes('backend') ? 'product manager' : 'frontend engineer';
+
+      const verb = pick(blueprint.scenarioVerbs, 'deliver');
+      const product = pick(profile?.products, 'a core product');
+      const principle = pick(profile?.principles, 'a key company value');
+
+     //const currentTopic = remainingTopics[0] ?? 'Wrap-up'
+     const meta = { ...(persistedSettings?.meta ?? {}) };
+
+    // Build the plan once (deterministic by sessionId)
+      if (!Array.isArray(meta.topicPlan) || !Number.isInteger(meta.topicCursor)) {
+        meta.topicPlan = shuffleDeterministic(DEFAULT_TOPICS, sessionId);
+        meta.topicCursor = 0;
+
+        await prisma.interviewSession.update({
+          where: { id: sessionId },
+          data: {
+            settings: {
+              ...persistedSettings,
+              meta: { ...meta, coveredTopics },
+            },
+          },
+        });
+      }
+
+      // Filter out already covered from the plan (in case of back/refresh)
+      const plannedRemaining = (meta.topicPlan as string[]).filter(
+        (t: string) => !coveredTopics.includes(t)
+      );
+      
+
+      // Pick the next topic from the shuffled plan
+      const currentTopic = plannedRemaining[0] ?? 'Wrap-up';
+
+
+      // choose a template for the topic and fill slots
+      const topicKey = currentTopic as keyof typeof templates;
+      const base = pick(templates[topicKey], `Ask about ${currentTopic} in context of ${product}.`);
+      const seed = base
+        .replace('{verb}', verb)
+        .replace('{product}', product)
+        .replace('{rolePeer}', rolePeer);
+
     // 2) Build messages with a real system prompt (now includes AVOID list)
     const sys = {
       role: 'system',
       content: `
-You are a strict, turn-based ${settings?.persona ?? 'behavioral'} interviewer.
-Rules:
-- Ask EXACTLY one question per turn.
-- Never invent or simulate the candidate's answer.
-- After a user answer, give at most 1–2 concise sentences of feedback, then ask the next question.
-- Keep outputs short.
-- Don't be robotic. Be human and conversational. Maybe start with a greeting like how are you doing before actually starting the interview for authentic experience.
-- You should ask around 4-6 questions, aiming for 5 unless you would like to expand upon something said by the candidate that was unclear
-- Do not ask the same or very similar question more than once.
-- Keep track of topics already discussed and move to a new topic each turn.
-- If a topic has been covered in detail, transition to a different skill area or behavioral theme.
-- Stay in ${settings?.language ?? 'English'} and target a ${settings?.difficulty ?? 'medium'} level.
-${settings?.jobRole ? `- The role is ${settings.jobRole}.` : ''}
-
-TOPICS:
-- All: ${DEFAULT_TOPICS.join(', ')}
-- Covered: ${coveredTopics.length ? coveredTopics.join(', ') : '(none)'}
-- Remaining: ${remainingTopics.length ? remainingTopics.join(', ') : '(none)'}
-
-AVOID REPEATING any of the recent questions:
-${avoidList}
-
-Choose ONE topic from Remaining (or if none remain, move to wrap-up) and output JSON ONLY with this schema:
-{"topic": string, "question": string, "brief_feedback": string}
-"topic" must be one of Remaining (or "Wrap-up" if none remain). "brief_feedback" may be empty on the first turn.
-`,
+    You are a strict, turn-based ${settings?.persona ?? 'behavioral'} interviewer.
+    Rules:
+    - Ask EXACTLY one question per turn.
+    - Never invent or simulate the candidate's answer.
+    - After a user answer, give at most 1–2 concise sentences of feedback, then ask the next question.
+    - Keep outputs short and human (no bullet lists).
+    - Aim for 4–6 questions total.
+    - Do NOT ask if the candidate is ready; the interview has already started.
+    - Do not ask the same or very similar question.
+    
+    TOPICS:
+    - All: ${DEFAULT_TOPICS.join(', ')}
+    - Covered: ${coveredTopics.length ? coveredTopics.join(', ') : '(none)'}
+    - Remaining: ${remainingTopics.length ? remainingTopics.join(', ') : '(none)'}
+    
+    CURRENT TOPIC (you must stick to this): ${currentTopic}
+    
+    SEED (must inform your question): "${seed}"
+    Incorporate one relevant company principle such as "${principle}".
+    
+    AVOID REPEATING any of the recent questions:
+    ${avoidList}
+    
+    Output JSON ONLY with this schema (no code fences, no extra keys):
+    {"topic":"${currentTopic}","question": string, "brief_feedback": string}
+    "brief_feedback" may be empty on the first turn.
+    `.trim(),
     } as const;
 
     const prior = history.map(m => ({
@@ -185,10 +263,7 @@ Choose ONE topic from Remaining (or if none remain, move to wrap-up) and output 
     }
 
     // --- NEW: minimal server-side guardrail: ensure topic advances & dedup --
-    const chosenTopic = (payload.topic && !coveredTopics.includes(payload.topic))
-      ? payload.topic
-      : (remainingTopics[0] ?? 'Wrap-up');
-
+    const chosenTopic = currentTopic;
     // Check similarity vs. recent assistant questions; if too similar, retry once
     const looksDuplicate = recentAssistantQs.some(q => isTooSimilar(q, payload.question));
     if (looksDuplicate) {
@@ -226,19 +301,37 @@ Output JSON ONLY: {"topic":"${chosenTopic}","question":"<new question>","brief_f
       }
     }
 
-    // Mark topic as covered
+    // Mark topic as covered + advance cursor + persist meta
+    const plan: string[] = Array.isArray(meta.topicPlan)
+    ? meta.topicPlan
+    : shuffleDeterministic(DEFAULT_TOPICS, sessionId); // safety fallback
+
     if (chosenTopic !== 'Wrap-up' && !coveredTopics.includes(chosenTopic)) {
-      coveredTopics.push(chosenTopic);
-      await prisma.interviewSession.update({
-        where: { id: sessionId },
-        data: {
-          settings: {
-            ...persistedSettings,
-            meta: { ...(persistedSettings?.meta ?? {}), coveredTopics },
-          },
-        },
-      });
+    coveredTopics.push(chosenTopic);
     }
+
+    // Advance cursor to the item *after* the chosen topic (idempotent)
+    const idxInPlan = plan.indexOf(chosenTopic);
+    const nextCursor =
+    idxInPlan >= 0
+      ? idxInPlan + 1
+      : Math.max( (meta.topicCursor ?? 0) + 1, 0 ); // fallback if topic not in plan
+
+    await prisma.interviewSession.update({
+    where: { id: sessionId },
+    data: {
+      settings: {
+        ...persistedSettings,
+        meta: {
+          ...meta,
+          topicPlan: plan,
+          topicCursor: nextCursor,
+          coveredTopics,
+        },
+      },
+    },
+  });
+
 
     const finalAssistantText =
       (payload.brief_feedback ? `${payload.brief_feedback}\n\n` : '') + payload.question;
